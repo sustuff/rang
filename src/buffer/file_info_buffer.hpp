@@ -6,6 +6,8 @@
 class FileInfoBuffer : public Buffer {
     Q_OBJECT
   public:
+    using Buffer::Buffer;
+
     QVector<QString> getLines() override;
 
   public slots:

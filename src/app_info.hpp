@@ -6,7 +6,9 @@
 
 struct AppInfo {
     inline static QString title = "rang";
-    inline static QDateTime build_date =
+    inline static QString versionString = "0.1.0";
+    inline static QString description = "Qt-based command line file manager";
+    inline static QDateTime buildDate =
         QDateTime::fromSecsSinceEpoch(RANG_BUILD_TIMESTAMP, QTimeZone::utc());
 };
 

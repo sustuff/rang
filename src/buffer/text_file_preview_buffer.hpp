@@ -5,6 +5,7 @@
 class TextFilePreviewBuffer : public Buffer {
     Q_OBJECT
   public:
+    using Buffer::Buffer;
 };
 
 #endif  // RANG_SRC_BUFFER_TEXT_FILE_PREVIEW_BUFFER_HPP_

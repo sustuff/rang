@@ -6,6 +6,7 @@
 class Register : public QObject {
     Q_OBJECT
   public:
+    using QObject::QObject;
 };
 
 #endif  // RANG_SRC_REGISTER_REGISTER_HPP_

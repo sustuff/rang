@@ -6,6 +6,7 @@
 class TerminalRenderer : public Renderer {
     Q_OBJECT
   public:
+    using Renderer::Renderer;
 };
 
 #endif  // RANG_SRC_WINDOW_TERMINAL_RENDERER_HPP_

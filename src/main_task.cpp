@@ -1,24 +1,29 @@
 #include "main_task.hpp"
 
-#include "app_info.hpp"
-#include "app_state.hpp"
-#include "buffer/file_info_buffer.hpp"
-#include "buffer/file_list_buffer.hpp"
+MainTask* MainTask::instance() {
+  return MainTask::self;
+}
 
 MainTask::MainTask(QObject* parent) : QObject(parent) {
+  if (MainTask::self) {
+    throw QException();  // only one instance is allowed
+  }
+  MainTask::self = this;
 }
 
 void MainTask::run() {
   qInfo("running %s (built %s)", qUtf8Printable(AppInfo::title),
-        qUtf8Printable(AppInfo::build_date.toString()));
+        qUtf8Printable(AppInfo::buildDate.toString()));
 
-  auto* state = new AppState();
-  auto* file_list_buffer = new FileListBuffer();
-  auto* preview_buffer = new FileInfoBuffer();
+  appState = new AppState(this);
+  listener = new Listener(this);
 
-  connect(&state->current_dir, &PathRegister::changed, file_list_buffer,
+  auto* file_list_buffer = new FileListBuffer(this);
+  auto* preview_buffer = new FileInfoBuffer(this);
+
+  connect(&appState->current_dir, &PathRegister::changed, file_list_buffer,
           [=](const QFileInfo& file) { file_list_buffer->setPath(file.filesystemFilePath()); });
-  connect(&state->preview_path, &PathRegister::changed, preview_buffer,
+  connect(&appState->preview_path, &PathRegister::changed, preview_buffer,
           [=](const QFileInfo& file) { preview_buffer->setPath(file.filesystemFilePath()); });
 
   auto draw = [&]() {
@@ -40,11 +45,13 @@ void MainTask::run() {
         qUtf8Printable(result));
   };
 
-  state->current_dir.setPath(QFileInfo("../src"));
-  state->preview_path.setPath(QFileInfo("../src/main.cpp"));
+  appState->current_dir.setPath(QFileInfo("../src"));
+  appState->preview_path.setPath(QFileInfo("../src/main.cpp"));
   draw();
 
-  emit finished();
+  // exit on enter, non-blocking
+  auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
+  connect(notifier, &QSocketNotifier::activated, this, &MainTask::finished);
 }
 
 #include "moc_main_task.cpp"

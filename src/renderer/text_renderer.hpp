@@ -3,6 +3,10 @@
 
 #include "renderer.hpp"
 
-class TextRenderer : public Renderer {};
+class TextRenderer : public Renderer {
+    Q_OBJECT
+  public:
+    using Renderer::Renderer;
+};
 
 #endif  // RANG_SRC_RENDERER_TEXT_RENDERER_HPP_

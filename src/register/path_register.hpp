@@ -6,6 +6,8 @@
 class PathRegister : public Register {
     Q_OBJECT
   public:
+    using Register::Register;
+
     Q_PROPERTY(QFileInfo path READ path WRITE setPath NOTIFY changed);
 
     const QFileInfo& path() const;

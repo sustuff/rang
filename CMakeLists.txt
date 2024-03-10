@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(rang)
 
-find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core Network)
 qt_standard_project_setup()
 
 add_executable(rang src/main.cpp
@@ -26,12 +26,18 @@ add_executable(rang src/main.cpp
         src/buffer/text_file_preview_buffer.cpp
         src/buffer/text_file_preview_buffer.hpp
         src/renderer/text_renderer.cpp
-        src/renderer/text_renderer.hpp)
+        src/renderer/text_renderer.hpp
+        src/ipc/listener.cpp
+        src/ipc/listener.hpp
+        src/client_task.cpp
+        src/client_task.hpp
+        src/ipc/connection_handler.cpp
+        src/ipc/connection_handler.hpp)
 
 target_include_directories(rang PRIVATE src)
 target_compile_features(rang PUBLIC cxx_std_20)
-target_link_libraries(rang PRIVATE Qt6::Core)
-target_precompile_headers(rang PRIVATE <QtCore>)
+target_link_libraries(rang PRIVATE Qt6::Core Qt6::Network)
+target_precompile_headers(rang PRIVATE <QtCore> <QtNetwork>)
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/build_timestamp_script.cmake.in"
         "${CMAKE_CURRENT_BINARY_DIR}/build_timestamp_script.cmake"

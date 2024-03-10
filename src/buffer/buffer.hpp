@@ -4,6 +4,8 @@
 class Buffer : public QObject {
     Q_OBJECT
   public:
+    using QObject::QObject;
+
     virtual QVector<QString> getLines() = 0;
 
   public slots:

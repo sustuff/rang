@@ -8,6 +8,8 @@
 class AppState : public QObject {
     Q_OBJECT
   public:
+    using QObject::QObject;
+
     PathRegister current_dir;
     PathRegister preview_path;
     QVector<PathRegister> selected_paths;
