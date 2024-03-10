@@ -1,11 +1,13 @@
-// module or class includes
 #include <QtCore>
 
-// text stream is text-codec aware
-QTextStream cout(stdout, QIODevice::WriteOnly);
+#include "main_task.hpp"
 
-int main()
-{
-    cout << "Hello, world!" << Qt::endl;
+int main(int argc, char* argv[]) {
+  QCoreApplication a(argc, argv);
+
+  auto* task = new MainTask(&a);
+  QObject::connect(task, SIGNAL(finished()), &a, SLOT(quit()));
+  QTimer::singleShot(0, task, SLOT(run()));
+
+  return QCoreApplication::exec();
 }
-

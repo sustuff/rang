@@ -1,0 +1,4 @@
+string(TIMESTAMP BUILD_TIMESTAMP "%s" UTC)
+
+configure_file("@CMAKE_CURRENT_SOURCE_DIR@/cmake/templates/build_timestamp.h.cmake.in"
+               "@CMAKE_CURRENT_BINARY_DIR@/generated/build_timestamp.h")
