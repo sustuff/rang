@@ -32,7 +32,9 @@ add_executable(rang src/main.cpp
         src/client_task.cpp
         src/client_task.hpp
         src/ipc/connection_handler.cpp
-        src/ipc/connection_handler.hpp)
+        src/ipc/connection_handler.hpp
+        src/ipc/messages/message.cpp
+        src/ipc/messages/message.hpp)
 
 target_include_directories(rang PRIVATE src)
 target_compile_features(rang PUBLIC cxx_std_20)

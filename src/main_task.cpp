@@ -22,9 +22,9 @@ void MainTask::run() {
   auto* preview_buffer = new FileInfoBuffer(this);
 
   connect(&appState->current_dir, &PathRegister::changed, file_list_buffer,
-          [=](const QFileInfo& file) { file_list_buffer->setPath(file.filesystemFilePath()); });
+          &FileListBuffer::setPath);
   connect(&appState->preview_path, &PathRegister::changed, preview_buffer,
-          [=](const QFileInfo& file) { preview_buffer->setPath(file.filesystemFilePath()); });
+          &FileInfoBuffer::setPath);
 
   auto draw = [&]() {
     file_list_buffer->update();
@@ -45,8 +45,8 @@ void MainTask::run() {
         qUtf8Printable(result));
   };
 
-  appState->current_dir.setPath(QFileInfo("../src"));
-  appState->preview_path.setPath(QFileInfo("../src/main.cpp"));
+  appState->current_dir.setPath("../src");
+  appState->preview_path.setPath("../src/main.cpp");
   draw();
 
   // exit on enter, non-blocking
