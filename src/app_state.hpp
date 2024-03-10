@@ -5,7 +5,9 @@
 
 #include "register/path_register.hpp"
 
-struct AppState {
+class AppState : public QObject {
+    Q_OBJECT
+  public:
     PathRegister current_dir;
     PathRegister preview_path;
     QVector<PathRegister> selected_paths;

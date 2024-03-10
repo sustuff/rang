@@ -3,6 +3,9 @@
 
 #include <QtCore>
 
-struct Register {};
+class Register : public QObject {
+    Q_OBJECT
+  public:
+};
 
 #endif  // RANG_SRC_REGISTER_REGISTER_HPP_

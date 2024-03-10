@@ -10,7 +10,17 @@ add_executable(rang src/main.cpp
         src/register/path_register.hpp
         src/app_info.hpp
         src/main_task.hpp
-        src/main_task.cpp)
+        src/main_task.cpp
+        src/app_state.cpp
+        src/buffer/buffer.cpp
+        src/buffer/buffer.hpp
+        src/buffer/file_list_buffer.cpp
+        src/buffer/file_list_buffer.hpp
+        src/register/path_register.cpp
+        src/buffer/file_info_buffer.cpp
+        src/buffer/file_info_buffer.hpp
+        src/window/window.cpp
+        src/window/window.hpp)
 
 target_include_directories(rang PRIVATE src)
 target_compile_features(rang PUBLIC cxx_std_20)
