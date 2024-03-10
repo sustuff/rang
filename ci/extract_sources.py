@@ -33,7 +33,7 @@ def extract_sources(build_dir: str, target_name: str):
 def get_notgenerated_sources(sources) -> [str]:
     result = set()
     for source in sources:
-        if source.get("isGenerated", False):
+        if source.get("isGenerated", False) or source.get("backtrace", 0) == 0:
             continue
         result.add(source["path"])
     return list(result)
