@@ -33,7 +33,7 @@ Check formatting of sources:
     <<: *global_cache
     policy: pull
   script:
-    - python3 ci/extract_sources.py test | xargs -n1 clang-format --dry-run -Werror --verbose
+    - python3 ci/extract_sources.py rang | xargs -n1 clang-format --dry-run -Werror --verbose
 
 Build:
   stage: build
@@ -47,7 +47,7 @@ Build:
     - cmake --build build
   artifacts:
     paths:
-      - "build/test"
+      - build/rang
 
 Test:
   stage: test
@@ -58,4 +58,4 @@ Test:
     <<: *global_cache
     policy: pull
   script:
-    - build/test
+    - build/rang
