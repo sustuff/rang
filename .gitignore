@@ -1,3 +1,9 @@
+# ==== Project files
+/build
+/cmake-build-debug
+/cmake-build-release
+.idea
+
 # ==== CMake files
 CMakeLists.txt.user
 CMakeCache.txt
