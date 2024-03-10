@@ -14,7 +14,7 @@ void ClientTask::run() {
 
   connect(socket, &QLocalSocket::errorOccurred, this,
           [socket](QLocalSocket::LocalSocketError error) { qInfo() << "error" << error; });
-  socket->connectToServer("rang-server");
+  socket->connectToServer("rang-m_server");
 
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);

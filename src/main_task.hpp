@@ -26,8 +26,8 @@ class MainTask : public QObject {
   private:
     inline static MainTask* self = nullptr;
 
-    AppState* appState{};
-    Listener* listener{};
+    AppState* m_appState{};
+    Listener* m_listener{};
     //    QList<Buffer*> bufferList;
 };
 

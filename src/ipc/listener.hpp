@@ -15,7 +15,7 @@ class Listener : public QObject {
     void handleNewConnection();
 
   private:
-    QLocalServer* server{new QLocalServer()};
+    QLocalServer* m_server{new QLocalServer()};
 };
 
 #endif  // RANG_SRC_IPC_LISTENER_HPP_

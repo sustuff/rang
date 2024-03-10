@@ -10,9 +10,9 @@ class AppState : public QObject {
   public:
     using QObject::QObject;
 
-    PathRegister current_dir;
-    PathRegister preview_path;
-    QVector<PathRegister> selected_paths;
+    PathRegister currentDir;
+    PathRegister previewPath;
+    QList<PathRegister> selectedPaths;
 };
 
 #endif  // RANG_SRC_APP_STATE_HPP_

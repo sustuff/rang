@@ -2,20 +2,20 @@
 #include "connection_handler.hpp"
 
 Listener::Listener(QObject* parent) : QObject(parent) {
-  QLocalServer::removeServer("rang-server");
-  if (!server->listen("rang-server")) {
+  QLocalServer::removeServer("rang-m_server");
+  if (!m_server->listen("rang-m_server")) {
     qCritical() << "couldn't serve";
   }
-  connect(server, &QLocalServer::newConnection, this, &Listener::handleNewConnection);
+  connect(m_server, &QLocalServer::newConnection, this, &Listener::handleNewConnection);
 }
 
 void Listener::handleNewConnection() {
-  QLocalSocket* socket = server->nextPendingConnection();
+  QLocalSocket* socket = m_server->nextPendingConnection();
   new ConnectionHandler(socket, this);
 }
 
 Listener::~Listener() {
-  server->close();
+  m_server->close();
 }
 
 #include "moc_listener.cpp"

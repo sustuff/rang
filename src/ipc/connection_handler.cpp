@@ -1,26 +1,26 @@
 #include "connection_handler.hpp"
 
 ConnectionHandler::ConnectionHandler(QLocalSocket* socketIn, QObject* parent)
-    : QObject(parent), socket(socketIn) {
+    : QObject(parent), m_socket(socketIn) {
   qInfo() << "connection handler called";
 
-  readNotifier = new QSocketNotifier(socketIn->socketDescriptor(), QSocketNotifier::Read, this);
+  m_readNotifier = new QSocketNotifier(socketIn->socketDescriptor(), QSocketNotifier::Read, this);
   //  auto* writeNotifier =
   //      new QSocketNotifier(socketIn->socketDescriptor(), QSocketNotifier::Write, this);
 
-  connect(socket, &QLocalSocket::stateChanged, this, &ConnectionHandler::onSocketStateChanged);
-  connect(readNotifier, &QSocketNotifier::activated, this, &ConnectionHandler::dataAvailable);
+  connect(m_socket, &QLocalSocket::stateChanged, this, &ConnectionHandler::onSocketStateChanged);
+  connect(m_readNotifier, &QSocketNotifier::activated, this, &ConnectionHandler::dataAvailable);
 }
 
 void ConnectionHandler::onSocketStateChanged(QLocalSocket::LocalSocketState state) {
   if (state == QLocalSocket::LocalSocketState::ClosingState) {
-    readNotifier->setSocket(-1);
+    m_readNotifier->setSocket(-1);
   }
 }
 
 void ConnectionHandler::dataAvailable() {
   qInfo() << "data available";
-  auto msg = socket->readAll();
+  auto msg = m_socket->readAll();
   emit incomingMessage(std::move(msg));
 }
 

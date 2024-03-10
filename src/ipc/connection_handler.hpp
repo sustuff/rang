@@ -16,8 +16,8 @@ class ConnectionHandler : public QObject {
     void incomingMessage(QByteArray data);
 
   private:
-    QLocalSocket* socket;
-    QSocketNotifier* readNotifier{};
+    QLocalSocket* m_socket;
+    QSocketNotifier* m_readNotifier{};
 };
 
 #endif  // RANG_SRC_IPC_CONNECTION_HANDLER_HPP_

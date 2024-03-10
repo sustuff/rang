@@ -15,15 +15,15 @@ void MainTask::run() {
   qInfo("running %s (built %s)", qUtf8Printable(AppInfo::title),
         qUtf8Printable(AppInfo::buildDate.toString()));
 
-  appState = new AppState(this);
-  listener = new Listener(this);
+  m_appState = new AppState(this);
+  m_listener = new Listener(this);
 
   auto* file_list_buffer = new FileListBuffer(this);
   auto* preview_buffer = new FileInfoBuffer(this);
 
-  connect(&appState->current_dir, &PathRegister::changed, file_list_buffer,
+  connect(&m_appState->currentDir, &PathRegister::changed, file_list_buffer,
           &FileListBuffer::setPath);
-  connect(&appState->preview_path, &PathRegister::changed, preview_buffer,
+  connect(&m_appState->previewPath, &PathRegister::changed, preview_buffer,
           &FileInfoBuffer::setPath);
 
   auto draw = [&]() {
@@ -45,8 +45,8 @@ void MainTask::run() {
         qUtf8Printable(result));
   };
 
-  appState->current_dir.setPath("../src");
-  appState->preview_path.setPath("../src/main.cpp");
+  m_appState->currentDir.setPath("../src");
+  m_appState->previewPath.setPath("../src/main.cpp");
   draw();
 
   // exit on enter, non-blocking
