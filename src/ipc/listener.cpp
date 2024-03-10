@@ -2,7 +2,7 @@
 #include "connection_to_client_handler.hpp"
 
 Listener::Listener(QObject* parent) : QObject(parent) {
-  QLocalServer::removeServer("rang-server");
+  QLocalServer::removeServer("rang-server");  // TODO: unique server name and authentication
   if (!m_server->listen("rang-server")) {
     qCritical() << "couldn't serve";
   }

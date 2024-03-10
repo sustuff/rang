@@ -1,21 +1,19 @@
 #ifndef RANG_SRC_BUFFER_FILE_LIST_BUFFER_HPP_
 #define RANG_SRC_BUFFER_FILE_LIST_BUFFER_HPP_
 
-#include "buffer.hpp"
+#include "path_buffer.hpp"
 
-class FileListBuffer : public Buffer {
+class FileListBuffer : public PathBuffer {
     Q_OBJECT
   public:
-    using Buffer::Buffer;
+    using PathBuffer::PathBuffer;
 
     QVector<QString> getLines() override;
 
   public slots:
     void update() override;
-    void setPath(const std::filesystem::path& newPath);
 
   private:
-    QDir dir;
     QFileInfoList fileList;
 };
 

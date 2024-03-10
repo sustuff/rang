@@ -1,22 +1,20 @@
 #ifndef RANG_SRC_BUFFER_FILE_INFO_BUFFER_HPP_
 #define RANG_SRC_BUFFER_FILE_INFO_BUFFER_HPP_
 
-#include "buffer.hpp"
+#include "path_buffer.hpp"
 
-class FileInfoBuffer : public Buffer {
+class FileInfoBuffer : public PathBuffer {
     Q_OBJECT
   public:
-    using Buffer::Buffer;
+    using PathBuffer::PathBuffer;
 
     QVector<QString> getLines() override;
 
   public slots:
     void update() override;
-    void setPath(std::filesystem::path new_path);
 
   private:
     QFileInfo fileInfo;
-    std::filesystem::path path;
 };
 
 #endif  // RANG_SRC_BUFFER_FILE_INFO_BUFFER_HPP_

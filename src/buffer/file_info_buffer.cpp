@@ -11,11 +11,7 @@ QVector<QString> FileInfoBuffer::getLines() {
 }
 
 void FileInfoBuffer::update() {
-  fileInfo = QFileInfo(path);
-}
-
-void FileInfoBuffer::setPath(std::filesystem::path newPath) {
-  path = std::move(newPath);
+  fileInfo = QFileInfo(m_path);
 }
 
 #include "moc_file_info_buffer.cpp"
