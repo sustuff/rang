@@ -19,8 +19,14 @@ add_executable(rang src/main.cpp
         src/register/path_register.cpp
         src/buffer/file_info_buffer.cpp
         src/buffer/file_info_buffer.hpp
-        src/window/window.cpp
-        src/window/window.hpp)
+        src/renderer/renderer.cpp
+        src/renderer/renderer.hpp
+        src/renderer/terminal_renderer.cpp
+        src/renderer/terminal_renderer.hpp
+        src/buffer/text_file_preview_buffer.cpp
+        src/buffer/text_file_preview_buffer.hpp
+        src/renderer/text_renderer.cpp
+        src/renderer/text_renderer.hpp)
 
 target_include_directories(rang PRIVATE src)
 target_compile_features(rang PUBLIC cxx_std_20)
