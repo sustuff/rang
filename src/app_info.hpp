@@ -7,7 +7,7 @@
 struct AppInfo {
     inline static QString title = "rang";
     inline static QDateTime build_date =
-        QDateTime::fromSecsSinceEpoch(RANG_BUILD_TIMESTAMP, QTimeZone::UTC);
+        QDateTime::fromSecsSinceEpoch(RANG_BUILD_TIMESTAMP, QTimeZone::utc());
 };
 
 #endif  // RANG_SRC_APP_INFO_HPP_
