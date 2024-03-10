@@ -1,5 +1,6 @@
 #include "main_task.hpp"
 #include <iostream>
+#include "buffer/text_file_preview_buffer.hpp"
 
 MainTask* MainTask::instance() {
   return MainTask::self;
@@ -19,12 +20,13 @@ void MainTask::run() {
   m_appState = new AppState(this);
   m_listener = new Listener(this);
 
-  auto* file_list_buffer = new FileListBuffer(this);
-  auto* preview_buffer = new FileInfoBuffer(this);
+  auto* fileListBuffer = new FileListBuffer(this);
+  auto* fileInfoBuffer = new FileInfoBuffer(this);
+  auto* previewBuffer = new TextFilePreviewBuffer(this);
 
-  connect(&m_appState->currentDir, &PathRegister::changed, file_list_buffer,
+  connect(&m_appState->currentDir, &PathRegister::changed, fileListBuffer,
           &FileListBuffer::setPath);
-  connect(&m_appState->previewPath, &PathRegister::changed, preview_buffer,
+  connect(&m_appState->previewPath, &PathRegister::changed, previewBuffer,
           &FileInfoBuffer::setPath);
   auto* watcher = new QFileSystemWatcher(this);
 
@@ -34,23 +36,27 @@ void MainTask::run() {
             watcher->removePath(path);
             watcher->addPath(path);
           });
-  connect(&m_appState->previewPath, &PathRegister::changed, preview_buffer,
+  connect(&m_appState->previewPath, &PathRegister::changed, fileInfoBuffer,
           &FileInfoBuffer::setPath);
-  connect(watcher, &QFileSystemWatcher::directoryChanged, file_list_buffer,
-          &FileListBuffer::update);
+  connect(&m_appState->previewPath, &PathRegister::changed, previewBuffer,
+          &TextFilePreviewBuffer::setPath);
+  connect(watcher, &QFileSystemWatcher::directoryChanged, fileListBuffer, &FileListBuffer::update);
 
-  m_appState->currentDir.setPath("../src");
-  m_appState->previewPath.setPath("../src/main.cpp");
+  m_appState->currentDir.setPath(".");
+  m_appState->previewPath.setPath("./main.cpp");
 
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
   connect(notifier, &QSocketNotifier::activated, [=, this]() {
     auto draw = [&]() {
-      file_list_buffer->update();
-      preview_buffer->update();
+      fileListBuffer->update();
+      fileInfoBuffer->update();
+      previewBuffer->update();
 
-      auto list1 = file_list_buffer->getLines();
-      auto list2 = preview_buffer->getLines();
+      auto list1 = fileListBuffer->getLines();
+      auto list2 = fileInfoBuffer->getLines();
+      list2.append("===========================================");
+      list2 += previewBuffer->getLines();
       QString result;
       qsizetype n = qMax(list1.size(), list2.size());
       for (qsizetype i = 0; i < n; ++i) {
@@ -64,13 +70,17 @@ void MainTask::run() {
           qUtf8Printable(result));
     };
 
-    std::string str;
-    std::getline(std::cin, str);
+    std::string str_;
+    std::getline(std::cin, str_);
+    QString str = QString::fromStdString(str_);
     if (str == ":q") {
       emit finished();
-    } else {
-      draw();
+    } else if (str.startsWith(":o")) {
+      m_appState->currentDir.setPath(str.split(" ")[1].toStdString());
+    } else if (str.startsWith(":p")) {
+      m_appState->previewPath.setPath(str.split(" ")[1].toStdString());
     }
+    draw();
   });
 }
 

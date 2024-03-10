@@ -7,6 +7,13 @@ class TextFilePreviewBuffer : public PathBuffer {
     Q_OBJECT
   public:
     using PathBuffer::PathBuffer;
+
+  public slots:
+    void update() override;
+    QVector<QString> getLines() override;
+
+  private:
+    QString fileContent;
 };
 
 #endif  // RANG_SRC_BUFFER_TEXT_FILE_PREVIEW_BUFFER_HPP_
