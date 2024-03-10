@@ -21,7 +21,7 @@ void ConnectionHandler::onSocketStateChanged(QLocalSocket::LocalSocketState stat
 void ConnectionHandler::dataAvailable() {
   qInfo() << "data available";
   auto msg = m_socket->readAll();
-  emit incomingMessage(std::move(msg));
+  emit handleIncomingMessage(std::move(msg));
 }
 
 #include "moc_connection_handler.cpp"

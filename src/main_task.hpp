@@ -17,6 +17,8 @@ class MainTask : public QObject {
     MainTask& operator=(const MainTask&) = delete;
     static MainTask* instance();
 
+    AppState* appState() const;
+
   public slots:
     void run();
 

@@ -12,8 +12,8 @@ class ConnectionHandler : public QObject {
     void dataAvailable();
     void onSocketStateChanged(QLocalSocket::LocalSocketState state);
 
-  signals:
-    void incomingMessage(QByteArray data);
+  protected:
+    virtual void handleIncomingMessage(QByteArray data) = 0;
 
   private:
     QLocalSocket* m_socket;

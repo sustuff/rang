@@ -14,8 +14,11 @@ int main(int argc, char* argv[]) {
   parser.addHelpOption();
   parser.addVersionOption();
 
-  QCommandLineOption clientModeOption("client-mode");
+  QCommandLineOption clientModeOption("client-mode", "run in client mode");
   parser.addOption(clientModeOption);
+
+  QCommandLineOption setDirPathOption("set-current-dir", "change current dir", "new-current-dir");
+  parser.addOption(setDirPathOption);
 
   parser.process(app);
 
@@ -24,7 +27,8 @@ int main(int argc, char* argv[]) {
   if (clientMode) {
     auto* task = new ClientTask(&app);
     QObject::connect(task, &ClientTask::finished, &app, &QCoreApplication::quit);
-    QTimer::singleShot(0, task, &ClientTask::run);
+    QTimer::singleShot(0, task, [&]() { task->run(parser.value(setDirPathOption)); });
+
   } else {
     auto* task = new MainTask(&app);
     QObject::connect(task, &MainTask::finished, &app, &QCoreApplication::quit);

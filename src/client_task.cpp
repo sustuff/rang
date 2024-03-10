@@ -1,24 +1,24 @@
 #include "client_task.hpp"
 #include "app_info.hpp"
+#include "ipc/messages/set_current_dir_message.hpp"
 
-void ClientTask::run() {
+void ClientTask::run(const QString& newPath) {
   qInfo("running %s in client mode (built %s)", qUtf8Printable(AppInfo::title),
         qUtf8Printable(AppInfo::buildDate.toString()));
 
   auto* socket = new QLocalSocket(this);
-  connect(socket, &QLocalSocket::connected, this, [socket]() {
+  connect(socket, &QLocalSocket::connected, this, [this, socket, newPath]() {
     qInfo() << "connection succeed";
-    socket->write("hello\n");
-    qInfo() << socket->read(1024);
+    QDataStream stream(socket);
+    stream << SetCurrentDirMessage{.newPath = newPath};
+    socket->flush();
+
+    emit finished();
   });
 
   connect(socket, &QLocalSocket::errorOccurred, this,
-          [socket](QLocalSocket::LocalSocketError error) { qInfo() << "error" << error; });
-  socket->connectToServer("rang-m_server");
-
-  // exit on enter, non-blocking
-  auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
-  connect(notifier, &QSocketNotifier::activated, this, &ClientTask::finished);
+          [](QLocalSocket::LocalSocketError error) { qInfo() << "error" << error; });
+  socket->connectToServer("rang-server");
 }
 
 #include "moc_client_task.cpp"

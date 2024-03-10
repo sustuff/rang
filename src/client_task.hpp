@@ -9,7 +9,7 @@ class ClientTask : public QObject {
     using QObject::QObject;
 
   public slots:
-    void run();
+    void run(const QString& newPath);
 
   signals:
     void finished();
