@@ -14,6 +14,9 @@ class PathRegister : public Register {
 
     void setPath(std::filesystem::path new_path);
 
+    friend QDataStream& operator<<(QDataStream& in, const PathRegister& reg);
+    friend QDataStream& operator>>(QDataStream& in, PathRegister& reg);
+
   signals:
     void changed(const std::filesystem::path&);
 
