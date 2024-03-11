@@ -3,6 +3,7 @@
 
 #include <QtCore>
 
+/// Entry point in client mode.
 class ClientTask : public QObject {
     Q_OBJECT
   public:

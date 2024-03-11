@@ -5,6 +5,7 @@
 
 #include "register/path_register.hpp"
 
+/// AppState is a shared instance with global app properties.
 class AppState : public QObject {
     Q_OBJECT
   public:

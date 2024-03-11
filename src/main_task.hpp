@@ -8,6 +8,7 @@
 #include "buffer/file_list_buffer.hpp"
 #include "ipc/listener.hpp"
 
+/// Entry point in normal mode.
 class MainTask : public QObject {
     Q_OBJECT
   public:

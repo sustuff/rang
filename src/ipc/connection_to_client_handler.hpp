@@ -3,6 +3,8 @@
 
 #include "connection_handler.hpp"
 
+
+/// Created by Listener class.
 class ConnectionToClientHandler : public ConnectionHandler {
     Q_OBJECT
   public:

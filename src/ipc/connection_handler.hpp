@@ -3,6 +3,7 @@
 
 #include <QtCore>
 
+/// Basic class for both client-to-server and server-to-client communications.
 class ConnectionHandler : public QObject {
     Q_OBJECT
   public:

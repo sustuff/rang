@@ -3,6 +3,8 @@
 
 #include "set_current_dir_message.hpp"
 
+/// Universal Message class which can represent any message type.
+/// Used for message transportation over local sockets.
 struct Message {
     enum class Type {
       Empty,

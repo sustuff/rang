@@ -5,11 +5,14 @@
 #include <QtNetwork/QLocalServer>
 #include <QtNetwork/QLocalSocket>
 
+/// Listens on a local socket; connected clients can execute arbitrary commands.
+/// Used for interaction with app in client mode. Security is achieved by providing a unique
+/// access token through environment variable to a child shell process.
 class Listener : public QObject {
     Q_OBJECT
   public:
     explicit Listener(QObject* parent = nullptr);
-    ~Listener();
+    ~Listener() override;
 
   private slots:
     void handleNewConnection();

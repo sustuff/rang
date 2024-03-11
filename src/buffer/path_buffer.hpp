@@ -3,6 +3,7 @@
 
 #include "buffer.hpp"
 
+/// Most of buffers represent some 'path' in some form.
 class PathBuffer : public Buffer {
     Q_OBJECT
   public:
