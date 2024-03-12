@@ -37,6 +37,7 @@ Check formatting of sources:
     policy: pull
   script:
     - python3 ci/extract_sources.py rang | xargs -n1 clang-format --dry-run -Werror --verbose
+    - python3 ci/extract_sources.py tests | xargs -n1 clang-format --dry-run -Werror --verbose
 
 Test:
   stage: test
