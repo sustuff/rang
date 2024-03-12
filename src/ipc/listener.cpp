@@ -1,5 +1,5 @@
-#include "listener.hpp"
-#include "connection_to_client_handler.hpp"
+#include "ipc/listener.hpp"
+#include "ipc/connection_to_client_handler.hpp"
 
 Listener::Listener(QObject* parent) : QObject(parent) {
   QLocalServer::removeServer("rang-server");  // TODO: unique server name and authentication
@@ -18,4 +18,4 @@ Listener::~Listener() {
   m_server->close();
 }
 
-#include "moc_listener.cpp"
+#include "ipc/moc_listener.cpp"

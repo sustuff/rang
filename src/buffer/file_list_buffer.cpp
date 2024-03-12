@@ -1,4 +1,4 @@
-#include "file_list_buffer.hpp"
+#include "buffer/file_list_buffer.hpp"
 
 QVector<QString> FileListBuffer::getLines() {
   QVector<QString> result;
@@ -18,4 +18,4 @@ void FileListBuffer::update() {
   }
 }
 
-#include "moc_file_list_buffer.cpp"
+#include "buffer/moc_file_list_buffer.cpp"

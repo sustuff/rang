@@ -1,4 +1,4 @@
-#include "connection_to_client_handler.hpp"
+#include "ipc/connection_to_client_handler.hpp"
 #include "main_task.hpp"
 
 void ConnectionToClientHandler::handleIncomingMessage(QByteArray data) {
@@ -11,4 +11,4 @@ void ConnectionToClientHandler::handleIncomingMessage(QByteArray data) {
   qInfo() << "handled incoming message" << newPath;
 }
 
-#include "moc_connection_to_client_handler.cpp"
+#include "ipc/moc_connection_to_client_handler.cpp"
