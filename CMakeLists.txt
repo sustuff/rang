@@ -55,3 +55,10 @@ add_custom_target(rang-builddate ALL COMMAND ${CMAKE_COMMAND} -P
         "${CMAKE_CURRENT_BINARY_DIR}/build_timestamp_script.cmake")
 target_include_directories(rang PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated/")
 add_dependencies(rang rang-builddate)
+
+option(ENABLE_TESTING "Enable Catch2 tests" OFF)
+
+if(ENABLE_TESTING) 
+        enable_testing()
+        add_subdirectory(test)
+endif()
