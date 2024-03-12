@@ -47,7 +47,7 @@ Test:
     <<: *global_cache
     policy: pull
   script:
-    - cd build && ninja test
+    - cd build && make test
   artifacts:
     when: always
     paths:
