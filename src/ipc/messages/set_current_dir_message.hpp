@@ -9,5 +9,4 @@ struct SetCurrentDirMessage {
 QDataStream& operator<<(QDataStream& in, const SetCurrentDirMessage& reg);
 QDataStream& operator>>(QDataStream& in, SetCurrentDirMessage& reg);
 
-
 #endif  // RANG_SRC_IPC_MESSAGES_SET_CURRENT_DIR_MESSAGE_HPP_
