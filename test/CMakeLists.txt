@@ -2,9 +2,10 @@ find_package(Catch2 3 REQUIRED)
 
 add_executable(tests
     test.cpp
+    buffer_test.cpp
 )
 
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain rang-lib)
 
 add_test(
   NAME catch-tests
