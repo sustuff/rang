@@ -1,2 +1,2 @@
-#include "renderer.hpp"
-#include "moc_renderer.cpp"
+#include "renderer/renderer.hpp"
+#include "renderer/moc_renderer.cpp"

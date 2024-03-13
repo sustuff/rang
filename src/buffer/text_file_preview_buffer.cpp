@@ -1,4 +1,4 @@
-#include "text_file_preview_buffer.hpp"
+#include "buffer/text_file_preview_buffer.hpp"
 
 void TextFilePreviewBuffer::update() {
   QFile file(m_path);
@@ -10,4 +10,4 @@ QVector<QString> TextFilePreviewBuffer::getLines() {
   return fileContent.split('\n');
 }
 
-#include "moc_text_file_preview_buffer.cpp"
+#include "buffer/moc_text_file_preview_buffer.cpp"

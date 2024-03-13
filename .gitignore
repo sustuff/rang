@@ -3,6 +3,8 @@
 /cmake-build-debug
 /cmake-build-release
 .idea
+.cache
+.vscode
 
 # ==== CMake files
 CMakeLists.txt.user

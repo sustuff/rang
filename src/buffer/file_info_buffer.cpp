@@ -1,4 +1,4 @@
-#include "file_info_buffer.hpp"
+#include "buffer/file_info_buffer.hpp"
 
 QVector<QString> FileInfoBuffer::getLines() {
   QVector<QString> result;
@@ -14,4 +14,4 @@ void FileInfoBuffer::update() {
   fileInfo = QFileInfo(m_path);
 }
 
-#include "moc_file_info_buffer.cpp"
+#include "buffer/moc_file_info_buffer.cpp"

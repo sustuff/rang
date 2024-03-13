@@ -1,4 +1,4 @@
-#include "connection_handler.hpp"
+#include "ipc/connection_handler.hpp"
 
 ConnectionHandler::ConnectionHandler(QLocalSocket* socketIn, QObject* parent)
     : QObject(parent), m_socket(socketIn) {
@@ -24,4 +24,4 @@ void ConnectionHandler::dataAvailable() {
   emit handleIncomingMessage(std::move(msg));
 }
 
-#include "moc_connection_handler.cpp"
+#include "ipc/moc_connection_handler.cpp"

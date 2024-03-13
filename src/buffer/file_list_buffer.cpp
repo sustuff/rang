@@ -1,4 +1,4 @@
-#include "file_list_buffer.hpp"
+#include "buffer/file_list_buffer.hpp"
 
 QVector<QString> FileListBuffer::getLines() {
   QVector<QString> result;
@@ -13,9 +13,9 @@ QVector<QString> FileListBuffer::getLines() {
 void FileListBuffer::update() {
   fileList.clear();
   QDir dir(m_path);
-  for (const auto& entry : dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries)) {
+  for (const auto& entry : dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries, QDir::Name)) {
     fileList.append(entry);
   }
 }
 
-#include "moc_file_list_buffer.cpp"
+#include "buffer/moc_file_list_buffer.cpp"

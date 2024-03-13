@@ -5,10 +5,19 @@ cache: &global_cache
   policy: pull
 
 stages:
-  - build
   - format
+  - build
+  - test
 
-Build and test:
+Check formatting of sources:
+  stage: format
+  image: registry.gitlab.akhcheck.ru/pir/rang/ci:latest
+  tags:
+    - common
+  script:
+    - clang-format -Werror --dry-run --verbose $(find src include test -type f -name '*.cpp' -or -name '*.hpp')
+
+Build:
   stage: build
   image: registry.gitlab.akhcheck.ru/pir/rang/ci:latest
   tags:
@@ -16,19 +25,15 @@ Build and test:
   cache:
     <<: *global_cache
     policy: pull-push
-  before_script:
-    - mkdir -p build/.cmake/api/v1/query
-    - touch build/.cmake/api/v1/query/codemodel-v2
   script:
-    - cmake -Bbuild
+    - cmake -Bbuild -DENABLE_TESTING=ON
     - cmake --build build
-    - build/rang
   artifacts:
     paths:
       - build/rang
 
-Check formatting of sources:
-  stage: format
+Test:
+  stage: test
   image: registry.gitlab.akhcheck.ru/pir/rang/ci:latest
   tags:
     - common
@@ -36,4 +41,10 @@ Check formatting of sources:
     <<: *global_cache
     policy: pull
   script:
-    - python3 ci/extract_sources.py rang | xargs -n1 clang-format --dry-run -Werror --verbose
+    - cd build && make test
+  artifacts:
+    when: always
+    paths:
+      - build/test/report.xml
+    reports:
+      junit: build/test/report.xml

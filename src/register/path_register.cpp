@@ -1,4 +1,4 @@
-#include "path_register.hpp"
+#include "register/path_register.hpp"
 
 void PathRegister::setPath(std::filesystem::path new_path) {
   m_path = std::move(new_path);
@@ -20,4 +20,4 @@ QDataStream& operator>>(QDataStream& in, PathRegister& reg) {
   return in;
 }
 
-#include "moc_path_register.cpp"
+#include "register/moc_path_register.cpp"

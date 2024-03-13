@@ -1,4 +1,4 @@
-#include "set_current_dir_message.hpp"
+#include "ipc/messages/set_current_dir_message.hpp"
 
 QDataStream& operator<<(QDataStream& out, const SetCurrentDirMessage& reg) {
   out << reg.newPath;

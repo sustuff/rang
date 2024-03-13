@@ -1,3 +1,3 @@
-#include "buffer.hpp"
+#include "buffer/buffer.hpp"
 
-#include "moc_buffer.cpp"
+#include "buffer/moc_buffer.cpp"
