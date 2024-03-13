@@ -13,7 +13,7 @@ QVector<QString> FileListBuffer::getLines() {
 void FileListBuffer::update() {
   fileList.clear();
   QDir dir(m_path);
-  for (const auto& entry : dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries)) {
+  for (const auto& entry : dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries, QDir::Name)) {
     fileList.append(entry);
   }
 }
