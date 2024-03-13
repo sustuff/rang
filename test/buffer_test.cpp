@@ -20,7 +20,7 @@ std::string getRandomString(std::size_t size) {
 TEST_CASE("buffer test") {
   using namespace std::filesystem;
 
-  const path tmpDir{temp_directory_path() / ("/buffer_test_" + getRandomString(8))};
+  const path tmpDir{temp_directory_path() / ("buffer_test_" + getRandomString(8))};
   const path textFile1{tmpDir / "B" / "..f-f . f."};
   const path textFile2{tmpDir / ".D" / "file2"};
   create_directory(tmpDir);
