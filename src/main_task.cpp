@@ -26,8 +26,6 @@ void MainTask::run() {
 
   connect(&m_appState->currentDir, &PathRegister::changed, fileListBuffer,
           &FileListBuffer::setPath);
-  connect(&m_appState->previewPath, &PathRegister::changed, previewBuffer,
-          &FileInfoBuffer::setPath);
   auto* watcher = new QFileSystemWatcher(this);
 
   connect(&m_appState->currentDir, &PathRegister::changed,
