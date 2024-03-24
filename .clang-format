@@ -4,4 +4,5 @@ IndentWidth: 2
 UseTab: Never
 ColumnLimit: 100
 AllowShortIfStatementsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+InsertNewlineAtEOF: true
