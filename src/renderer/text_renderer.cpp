@@ -1,4 +1,6 @@
 #include "renderer/text_renderer.hpp"
+#include <iostream>
+#include "termcolor.hpp"
 
 TextRenderer::TextRenderer(Buffer* buffer) : Renderer{buffer}, buffer{buffer} {
   connect(buffer, &Buffer::contentChanged, this, &TextRenderer::update);
@@ -8,8 +10,9 @@ TextRenderer::TextRenderer(Buffer* buffer) : Renderer{buffer}, buffer{buffer} {
 void TextRenderer::update() {
   for (const Line& line : buffer->getLines()) {
     for (const Word& word : line.getPrefix(80).getWords()) {
-      qInfo() << word.getContent();
+      std::cout << word;
     }
+    std::cout << termcolor::reset << std::endl;
   }
 }
 

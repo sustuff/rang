@@ -1,6 +1,8 @@
 #ifndef RANG_INCLUDE_TEXT_COLOR_HPP_
 #define RANG_INCLUDE_TEXT_COLOR_HPP_
 
+#include "termcolor.hpp"
+
 class Color {
     quint8 red_;
     quint8 green_;
@@ -18,5 +20,10 @@ class Color {
     quint8 blue() const;
     quint8 alpha() const;
 };
+
+template <typename CharT>
+std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& stream, const Color& color) {
+  return termcolor::color{color.red(), color.green(), color.blue()}(stream);
+}
 
 #endif  // RANG_INCLUDE_TEXT_COLOR_HPP_

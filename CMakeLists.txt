@@ -40,7 +40,7 @@ add_library(rang-lib
         src/qt_operators.cpp
 )
 
-target_include_directories(rang-lib PUBLIC include)
+target_include_directories(rang-lib PUBLIC include PUBLIC third_party)
 target_compile_features(rang-lib PRIVATE cxx_std_20)
 target_include_directories(rang-lib PRIVATE ${CURSES_INCLUDE_DIRS})
 target_link_libraries(rang-lib PUBLIC Qt6::Core Qt6::Network ${CURSES_LIBRARIES})

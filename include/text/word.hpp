@@ -26,4 +26,9 @@ class Word {
 
 std::weak_ordering operator<=>(const Word&, const Word&);
 
+template <typename CharT>
+std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& stream, const Word& word) {
+  return stream << word.getColor() << word.getContent().toStdString();
+}
+
 #endif  // RANG_INCLUDE_TEXT_WORD_HPP_
