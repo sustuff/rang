@@ -1,16 +1,14 @@
 #include "client_task.hpp"
 #include "app_info.hpp"
-#include "ipc/messages/set_current_dir_message.hpp"
+#include "ipc/messages/messages.hpp"
 
-void ClientTask::run(const QString& newPath) {
-  qInfo("running %s in client mode (built %s)", qUtf8Printable(AppInfo::title),
-        qUtf8Printable(AppInfo::buildDate.toString()));
-
+void ClientTask::run(const QString& token, const QVariant& message) {
   auto* socket = new QLocalSocket(this);
-  connect(socket, &QLocalSocket::connected, this, [this, socket, newPath]() {
-    qInfo() << "connection succeed";
+  connect(socket, &QLocalSocket::connected, this, [=, this]() {
     QDataStream stream(socket);
-    stream << QVariant::fromValue(SetCurrentDirMessage{.newPath = newPath});
+
+    stream << QVariant::fromValue(AuthenticationMessage{.token = token});
+    stream << message;
     socket->flush();
 
     emit finished();

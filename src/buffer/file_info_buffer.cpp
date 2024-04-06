@@ -3,9 +3,13 @@
 QVector<Line> FileInfoBuffer::getLines() {
   QVector<Line> result;
 
-  result.append(fileInfo.absoluteFilePath());
-  result.append("owned by " + fileInfo.owner());
-  result.append("last modified at " + fileInfo.lastModified().toString());
+  if (fileInfo.absoluteFilePath().isEmpty()) {
+    result.append("no file selected");
+  } else {
+    result.append(fileInfo.absoluteFilePath());
+    result.append("owned by " + fileInfo.owner());
+    result.append("last modified at " + fileInfo.lastModified().toString());
+  }
 
   return result;
 }

@@ -3,22 +3,30 @@
 #include <QVariant>
 
 #include "compatibility.hpp"
+#include "ipc/messages/authentication_message.hpp"
 #include "ipc/messages/messages.hpp"
 #include "main_task.hpp"
 
-void ConnectionToClientHandler::handleIncomingMessage(QByteArray data) {
-  // TODO убедиться, что поток тут не заблокируется, если нам пришел только кусок команды
+void ConnectionToClientHandlerThread::handleIncomingMessage(QVariant message) {
+  MainTask* main_task = MainTask::instance();
 
-  QDataStream stream(data);
+  if (auto msg = get_if<AuthenticationMessage>(&message); msg != nullptr) {
+    if (msg->token == main_task->getRemoteControlToken()) {
+      authenticated_ = true;
+    }
+    return;
+  }
 
-  QVariant message;
-  stream >> message;
+  // Ignore other messages from non-authenticated clients.
+  if (!authenticated_)
+    return;
 
   if (auto msg = get_if<SetCurrentDirMessage>(&message); msg != nullptr) {
-    MainTask::instance()->appState()->currentDir.setPath(msg->newPath.toStdString());
-    qInfo() << "handled SetCurrentDir message";
+    main_task->appState()->currentDir.setPath(msg->newPath.toStdString());
+  } else if (auto msg = get_if<SetPreviewFileMessage>(&message); msg != nullptr) {
+    main_task->appState()->previewPath.setPath(msg->newPath.toStdString());
   } else {
-    qInfo() << "unknown incoming message";
+    qDebug() << "unknown incoming message";
   }
 }
 

@@ -14,13 +14,20 @@ else ()
 endif ()
 
 add_executable(tests
-        buffer_test.cpp ipc_test.cpp
+        buffer_test.cpp
 )
 
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain rang-lib)
 target_compile_features(tests PRIVATE cxx_std_20)
 
+add_executable(ncurses_tests
+        ncurses_test.cpp
+)
 
 include(CTest)
 include(Catch)
-catch_discover_tests(tests REPORTER JUnit DISCOVERY_MODE POST_BUILD OUTPUT_DIR report OUTPUT_SUFFIX .xml)
+
+foreach(targetname tests ncurses_tests)
+    target_link_libraries(${targetname} PRIVATE Catch2::Catch2WithMain rang-lib)
+    catch_discover_tests(${targetname} REPORTER JUnit DISCOVERY_MODE POST_BUILD OUTPUT_DIR report OUTPUT_SUFFIX .xml)
+endforeach()

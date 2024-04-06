@@ -15,7 +15,7 @@ MainTask::MainTask(QObject* parent) : QObject(parent) {
 }
 
 void MainTask::run() {
-  qInfo("running %s v%s (built %s)", qUtf8Printable(AppInfo::title),
+  qInfo("running %s v%s (built %s)", qUtf8Printable(AppInfo::appName),
         qUtf8Printable(AppInfo::versionString), qUtf8Printable(AppInfo::buildDate.toString()));
 
   m_appState = new AppState(this);
@@ -31,6 +31,7 @@ void MainTask::run() {
 
   connect(&m_appState->currentDir, &PathRegister::changed,
           [watcher](const std::filesystem::path& newPath) {
+            current_path(newPath);
             auto path = QString::fromStdString(newPath);
             watcher->removePath(path);
             watcher->addPath(path);
@@ -42,7 +43,7 @@ void MainTask::run() {
   connect(watcher, &QFileSystemWatcher::directoryChanged, fileListBuffer, &FileListBuffer::update);
 
   m_appState->currentDir.setPath(".");
-  m_appState->previewPath.setPath("./main.cpp");
+  m_appState->previewPath.setPath("");
 
   TextRenderer* fileListRenderer = new TextRenderer(fileListBuffer);
   TextRenderer* fileInfoRenderer = new TextRenderer(fileInfoBuffer);
@@ -62,17 +63,22 @@ void MainTask::run() {
     QString str = QString::fromStdString(str_);
     if (str == ":q") {
       emit finished();
-    } else if (str.startsWith(":o")) {
+    } else if (str.startsWith(":o") or str.startsWith("cd")) {
       m_appState->currentDir.setPath(str.split(" ")[1].toStdString());
-    } else if (str.startsWith(":p")) {
+      m_appState->previewPath.setPath("");
+    } else if (str.startsWith(":p") or str.startsWith("p")) {
       m_appState->previewPath.setPath(str.split(" ")[1].toStdString());
     }
     draw();
   });
 }
 
-AppState* MainTask::appState() const {
-  return m_appState;
+LockedAppState MainTask::appState() const {
+  return {m_appState, &m_mutex};
+}
+
+QString MainTask::getRemoteControlToken() const {
+  return m_remoteControlToken;
 }
 
 #include "moc_main_task.cpp"

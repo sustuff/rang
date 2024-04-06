@@ -18,7 +18,8 @@ class MainTask : public QObject {
     MainTask& operator=(const MainTask&) = delete;
     static MainTask* instance();
 
-    AppState* appState() const;
+    LockedAppState appState() const;
+    QString getRemoteControlToken() const;
 
   public slots:
     void run();
@@ -30,8 +31,11 @@ class MainTask : public QObject {
     inline static MainTask* self = nullptr;
 
     AppState* m_appState{};
+    mutable QMutex m_mutex{};
     Listener* m_listener{};
     //    QList<Buffer*> bufferList;
+
+    QString m_remoteControlToken{"token123"};
 };
 
 #endif  // RANG_SRC_MAIN_TASK_HPP_
