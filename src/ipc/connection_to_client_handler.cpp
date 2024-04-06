@@ -2,6 +2,8 @@
 
 #include <QVariant>
 
+#include "commands/set_current_dir_command.hpp"
+#include "commands/set_preview_file_command.hpp"
 #include "compatibility.hpp"
 #include "ipc/messages/authentication_message.hpp"
 #include "ipc/messages/messages.hpp"
@@ -22,9 +24,9 @@ void ConnectionToClientHandlerThread::handleIncomingMessage(QVariant message) {
     return;
 
   if (auto msg = get_if<SetCurrentDirMessage>(&message); msg != nullptr) {
-    main_task->appState()->currentDir.setPath(msg->newPath.toStdString());
+    SetCurrentDirCommand(main_task->appState()).execute(msg->newPath.toStdString());
   } else if (auto msg = get_if<SetPreviewFileMessage>(&message); msg != nullptr) {
-    main_task->appState()->previewPath.setPath(msg->newPath.toStdString());
+    SetPreviewFileCommand(main_task->appState()).execute(msg->newPath.toStdString());
   } else {
     qDebug() << "unknown incoming message";
   }
