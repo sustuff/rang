@@ -82,13 +82,10 @@ void MainTask::run() {
   });
 }
 
-AppState* MainTask::appState() const {
-  return m_appState;
+LockedAppState MainTask::appState() const {
+  return {m_appState, &m_mutex};
 }
 
-QMutex* MainTask::mutex() const {
-  return m_mutex;
-}
 
 QString MainTask::getRemoteControlToken() const {
   return m_remoteControlToken;

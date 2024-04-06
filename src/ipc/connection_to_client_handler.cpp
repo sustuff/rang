@@ -9,7 +9,6 @@
 
 void ConnectionToClientHandlerThread::handleIncomingMessage(QVariant message) {
   MainTask* main_task = MainTask::instance();
-  QMutexLocker lock(main_task->mutex());
 
   if (auto msg = get_if<AuthenticationMessage>(&message); msg != nullptr) {
     if (msg->token == main_task->getRemoteControlToken()) {
@@ -23,7 +22,7 @@ void ConnectionToClientHandlerThread::handleIncomingMessage(QVariant message) {
     return;
 
   if (auto msg = get_if<SetCurrentDirMessage>(&message); msg != nullptr) {
-    MainTask::instance()->appState()->currentDir.setPath(msg->newPath.toStdString());
+    main_task->appState()->currentDir.setPath(msg->newPath.toStdString());
     qInfo() << "handled SetCurrentDir message";
   } else {
     qInfo() << "unknown incoming message";

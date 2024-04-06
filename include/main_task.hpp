@@ -18,8 +18,7 @@ class MainTask : public QObject {
     MainTask& operator=(const MainTask&) = delete;
     static MainTask* instance();
 
-    AppState* appState() const;
-    QMutex* mutex() const;
+    LockedAppState appState() const;
     QString getRemoteControlToken() const;
 
   public slots:
@@ -32,7 +31,7 @@ class MainTask : public QObject {
     inline static MainTask* self = nullptr;
 
     AppState* m_appState{};
-    QMutex* m_mutex{};
+    mutable QMutex m_mutex{};
     Listener* m_listener{};
     //    QList<Buffer*> bufferList;
 
