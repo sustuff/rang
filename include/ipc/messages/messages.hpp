@@ -1,0 +1,6 @@
+#ifndef RANG_SRC_IPC_MESSAGES_MESSAGE_HPP_
+#define RANG_SRC_IPC_MESSAGES_MESSAGE_HPP_
+
+#include "set_current_dir_message.hpp"
+
+#endif  // RANG_SRC_IPC_MESSAGES_MESSAGE_HPP_

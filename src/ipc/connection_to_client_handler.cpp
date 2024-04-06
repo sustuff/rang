@@ -1,14 +1,24 @@
 #include "ipc/connection_to_client_handler.hpp"
+
+#include <QVariant>
+
+#include "ipc/messages/messages.hpp"
 #include "main_task.hpp"
 
 void ConnectionToClientHandler::handleIncomingMessage(QByteArray data) {
   // TODO убедиться, что поток тут не заблокируется, если нам пришел только кусок команды
-  // TODO считывать Message и обрабатывать разные типы сообщений
+
   QDataStream stream(data);
-  QString newPath;
-  stream >> newPath;
-  MainTask::instance()->appState()->currentDir.setPath(newPath.toStdString());
-  qInfo() << "handled incoming message" << newPath;
+
+  QVariant message;
+  stream >> message;
+
+  if (auto msg = get_if<SetCurrentDirMessage>(&message); msg != nullptr) {
+    MainTask::instance()->appState()->currentDir.setPath(msg->newPath.toStdString());
+    qInfo() << "handled SetCurrentDir message";
+  } else {
+    qInfo() << "unknown incoming message";
+  }
 }
 
 #include "ipc/moc_connection_to_client_handler.cpp"

@@ -47,4 +47,6 @@ Test:
     paths:
       - build/test/report.xml
     reports:
-      junit: build/test/report.xml
+      junit:
+        - build/test/report/buffer_test.xml
+        - build/test/report/ipc_test.xml

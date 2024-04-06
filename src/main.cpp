@@ -3,8 +3,11 @@
 #include "app_info.hpp"
 #include "client_task.hpp"
 #include "main_task.hpp"
+#include "meta.hpp"
 
 int main(int argc, char* argv[]) {
+  register_qt_metatypes();
+
   QCoreApplication app(argc, argv);
   QCoreApplication::setApplicationName(AppInfo::title);
   QCoreApplication::setApplicationVersion(AppInfo::versionString);

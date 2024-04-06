@@ -19,10 +19,12 @@ add_library(rang-lib
         src/ipc/listener.cpp
         src/client_task.cpp
         src/ipc/connection_handler.cpp
-        src/ipc/messages/message.cpp
+        src/ipc/messages/messages.cpp
         src/ipc/messages/set_current_dir_message.cpp
         src/ipc/connection_to_client_handler.cpp
-        src/buffer/path_buffer.cpp)
+        src/buffer/path_buffer.cpp
+        src/meta.cpp
+)
 
 target_include_directories(rang-lib PUBLIC include)
 target_compile_features(rang-lib PRIVATE cxx_std_20)

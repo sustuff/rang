@@ -10,7 +10,7 @@ void ClientTask::run(const QString& newPath) {
   connect(socket, &QLocalSocket::connected, this, [this, socket, newPath]() {
     qInfo() << "connection succeed";
     QDataStream stream(socket);
-    stream << SetCurrentDirMessage{.newPath = newPath};
+    stream << QVariant::fromValue(SetCurrentDirMessage{.newPath = newPath});
     socket->flush();
 
     emit finished();
