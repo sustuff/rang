@@ -28,7 +28,8 @@ int clientMain(int argc, char* argv[]) {
   if (parser.isSet(setDirPathOption)) {
     message = QVariant::fromValue(SetCurrentDirMessage{.newPath = parser.value(setDirPathOption)});
   } else if (parser.isSet(setPreviewFileOption)) {
-    message = QVariant::fromValue(SetPreviewFileMessage{.newPath = parser.value(setPreviewFileOption)});
+    message =
+        QVariant::fromValue(SetPreviewFileMessage{.newPath = parser.value(setPreviewFileOption)});
   } else {
     parser.showHelp(1);
   }

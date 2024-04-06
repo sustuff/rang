@@ -4,6 +4,9 @@ project(rang VERSION 0.2.0)
 find_package(Qt6 REQUIRED COMPONENTS Core Network)
 qt_standard_project_setup()
 
+set(CURSES_NEED_NCURSES TRUE)
+find_package(Curses REQUIRED)
+
 add_library(rang-lib
         src/app_state.cpp
         src/buffer/buffer.cpp
@@ -22,6 +25,8 @@ add_library(rang-lib
         src/ipc/messages/set_preview_file_message.cpp
         src/main_task.cpp
         src/meta.cpp
+        src/ncurses/base.cpp
+        src/ncurses/window.cpp
         src/normal_main.cpp
         src/register/current_dir_register.cpp
         src/register/path_register.cpp
@@ -33,7 +38,8 @@ add_library(rang-lib
 
 target_include_directories(rang-lib PUBLIC include)
 target_compile_features(rang-lib PRIVATE cxx_std_20)
-target_link_libraries(rang-lib PUBLIC Qt6::Core Qt6::Network)
+target_include_directories(rang-lib PRIVATE ${CURSES_INCLUDE_DIRS})
+target_link_libraries(rang-lib PUBLIC Qt6::Core Qt6::Network ${CURSES_LIBRARIES})
 target_precompile_headers(rang-lib PUBLIC <QtCore> <QtNetwork>)
 
 add_executable(rang src/main.cpp)
