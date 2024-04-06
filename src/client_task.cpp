@@ -4,7 +4,7 @@
 #include "ipc/messages/set_current_dir_message.hpp"
 
 void ClientTask::run(const QString& newPath, const QString& token) {
-  qInfo("running %s in client mode (built %s)", qUtf8Printable(AppInfo::title),
+  qInfo("running %s in (client mode) (built %s)", qUtf8Printable(AppInfo::clientAppName),
         qUtf8Printable(AppInfo::buildDate.toString()));
 
   auto* socket = new QLocalSocket(this);

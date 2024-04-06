@@ -25,6 +25,9 @@ add_library(rang-lib
         src/ipc/connection_to_client_handler.cpp
         src/buffer/path_buffer.cpp
         src/meta.cpp
+        src/client_main.cpp
+        src/normal_main.cpp
+        src/register/current_dir_register.cpp
 )
 
 target_include_directories(rang-lib PUBLIC include)
@@ -35,6 +38,8 @@ target_precompile_headers(rang-lib PUBLIC <QtCore> <QtNetwork>)
 add_executable(rang src/main.cpp)
 target_compile_features(rang PRIVATE cxx_std_20)
 target_link_libraries(rang PRIVATE rang-lib)
+
+set(RANG_CLIENT_APP_NAME "ra")
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/build_config_script.cmake.in"
         "${CMAKE_CURRENT_BINARY_DIR}/build_config_script.cmake"

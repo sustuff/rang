@@ -14,7 +14,7 @@ MainTask::MainTask(QObject* parent) : QObject(parent) {
 }
 
 void MainTask::run() {
-  qInfo("running %s v%s (built %s)", qUtf8Printable(AppInfo::title),
+  qInfo("running %s v%s (built %s)", qUtf8Printable(AppInfo::appName),
         qUtf8Printable(AppInfo::versionString), qUtf8Printable(AppInfo::buildDate.toString()));
 
   m_appState = new AppState(this);
@@ -30,6 +30,7 @@ void MainTask::run() {
 
   connect(&m_appState->currentDir, &PathRegister::changed,
           [watcher](const std::filesystem::path& newPath) {
+            current_path(newPath);
             auto path = QString::fromStdString(newPath);
             watcher->removePath(path);
             watcher->addPath(path);
@@ -41,7 +42,7 @@ void MainTask::run() {
   connect(watcher, &QFileSystemWatcher::directoryChanged, fileListBuffer, &FileListBuffer::update);
 
   m_appState->currentDir.setPath(".");
-  m_appState->previewPath.setPath("./main.cpp");
+  m_appState->previewPath.setPath("");
 
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
@@ -53,19 +54,19 @@ void MainTask::run() {
 
       auto list1 = fileListBuffer->getLines();
       auto list2 = fileInfoBuffer->getLines();
-      list2.append("===========================================");
+      list2.append("===========");
       list2 += previewBuffer->getLines();
       QString result;
       qsizetype n = qMax(list1.size(), list2.size());
       for (qsizetype i = 0; i < n; ++i) {
         result +=
-            (list1.value(i, "").leftJustified(80) + " | " + list2.value(i, "").leftJustified(80)) +
+            (list1.value(i, "").leftJustified(30) + " | " + list2.value(i, "").leftJustified(30)) +
             "\n";
       }
       qInfo(
-          "======================================================== listing ???? "
-          "========================================================\n%s",
-          qUtf8Printable(result));
+          "===== listing %s "
+          "====\n%s",
+          m_appState->currentDir.path().c_str(), qUtf8Printable(result));
     };
 
     std::string str_;
@@ -73,9 +74,10 @@ void MainTask::run() {
     QString str = QString::fromStdString(str_);
     if (str == ":q") {
       emit finished();
-    } else if (str.startsWith(":o")) {
+    } else if (str.startsWith(":o") or str.startsWith("cd")) {
       m_appState->currentDir.setPath(str.split(" ")[1].toStdString());
-    } else if (str.startsWith(":p")) {
+      m_appState->previewPath.setPath("");
+    } else if (str.startsWith(":p") or str.startsWith("p")) {
       m_appState->previewPath.setPath(str.split(" ")[1].toStdString());
     }
     draw();
@@ -85,7 +87,6 @@ void MainTask::run() {
 LockedAppState MainTask::appState() const {
   return {m_appState, &m_mutex};
 }
-
 
 QString MainTask::getRemoteControlToken() const {
   return m_remoteControlToken;

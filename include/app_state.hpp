@@ -4,6 +4,7 @@
 #include <QtCore>
 
 #include "register/path_register.hpp"
+#include "register/current_dir_register.hpp"
 
 /// AppState is a shared instance with global app properties.
 class AppState : public QObject {
@@ -11,7 +12,7 @@ class AppState : public QObject {
   public:
     using QObject::QObject;
 
-    PathRegister currentDir;
+    CurrentDirRegister currentDir;
     PathRegister previewPath;
     QList<PathRegister> selectedPaths;
 };
