@@ -14,8 +14,8 @@ MainTask::MainTask(QObject* parent) : QObject(parent) {
 }
 
 void MainTask::run() {
-  qInfo("running %s (built %s)", qUtf8Printable(AppInfo::title),
-        qUtf8Printable(AppInfo::buildDate.toString()));
+  qInfo("running %s v%s (built %s)", qUtf8Printable(AppInfo::title),
+        qUtf8Printable(AppInfo::versionString), qUtf8Printable(AppInfo::buildDate.toString()));
 
   m_appState = new AppState(this);
   m_listener = new Listener(this);

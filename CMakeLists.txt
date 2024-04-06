@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(rang)
+project(rang VERSION 0.2.0)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Network)
 qt_standard_project_setup()
@@ -33,14 +33,13 @@ add_executable(rang src/main.cpp)
 target_compile_features(rang PRIVATE cxx_std_20)
 target_link_libraries(rang PRIVATE rang-lib)
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/build_timestamp_script.cmake.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/build_timestamp_script.cmake"
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/build_config_script.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/build_config_script.cmake"
         @ONLY)
-
-add_custom_target(rang-builddate ALL COMMAND ${CMAKE_COMMAND} -P
-        "${CMAKE_CURRENT_BINARY_DIR}/build_timestamp_script.cmake")
+add_custom_target(rang-buildconfig ALL COMMAND ${CMAKE_COMMAND} -P
+        "${CMAKE_CURRENT_BINARY_DIR}/build_config_script.cmake")
 target_include_directories(rang-lib PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/generated/")
-add_dependencies(rang-lib rang-builddate)
+add_dependencies(rang-lib rang-buildconfig)
 
 option(ENABLE_TESTING "Enable Catch2 tests" OFF)
 
