@@ -21,10 +21,14 @@ add_executable(ncurses_tests
         ncurses_test.cpp
 )
 
+add_executable(keystroke_test
+        keystroke_test.cpp
+)
+
 include(CTest)
 include(Catch)
 
-foreach(targetname tests ncurses_tests)
+foreach(targetname tests ncurses_tests keystroke_test)
     target_link_libraries(${targetname} PRIVATE Catch2::Catch2WithMain rang-lib)
     catch_discover_tests(${targetname} REPORTER JUnit DISCOVERY_MODE POST_BUILD OUTPUT_DIR report OUTPUT_SUFFIX .xml)
 endforeach()

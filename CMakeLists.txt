@@ -34,6 +34,8 @@ add_library(rang-lib
         src/renderer/renderer.cpp
         src/renderer/terminal_renderer.cpp
         src/renderer/text_renderer.cpp
+        src/utility/trie.cpp
+        src/keystroke_parser.cpp
 )
 
 target_include_directories(rang-lib PUBLIC include)
