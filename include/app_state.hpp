@@ -3,8 +3,8 @@
 
 #include <QtCore>
 
-#include "register/path_register.hpp"
 #include "register/current_dir_register.hpp"
+#include "register/path_register.hpp"
 
 /// AppState is a shared instance with global app properties.
 class AppState : public QObject {
