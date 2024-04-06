@@ -1,6 +1,7 @@
 #include "main_task.hpp"
 #include <iostream>
 #include "buffer/text_file_preview_buffer.hpp"
+#include "renderer/text_renderer.hpp"
 
 MainTask* MainTask::instance() {
   return MainTask::self;
@@ -43,6 +44,10 @@ void MainTask::run() {
   m_appState->currentDir.setPath(".");
   m_appState->previewPath.setPath("./main.cpp");
 
+  TextRenderer* fileListRenderer = new TextRenderer(fileListBuffer);
+  TextRenderer* fileInfoRenderer = new TextRenderer(fileInfoBuffer);
+  TextRenderer* previewRenderer = new TextRenderer(previewBuffer);
+
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
   connect(notifier, &QSocketNotifier::activated, [=, this]() {
@@ -50,22 +55,6 @@ void MainTask::run() {
       fileListBuffer->update();
       fileInfoBuffer->update();
       previewBuffer->update();
-
-      auto list1 = fileListBuffer->getLines();
-      auto list2 = fileInfoBuffer->getLines();
-      list2.append("===========================================");
-      list2 += previewBuffer->getLines();
-      QString result;
-      qsizetype n = qMax(list1.size(), list2.size());
-      for (qsizetype i = 0; i < n; ++i) {
-        result +=
-            (list1.value(i, "").leftJustified(80) + " | " + list2.value(i, "").leftJustified(80)) +
-            "\n";
-      }
-      qInfo(
-          "======================================================== listing ???? "
-          "========================================================\n%s",
-          qUtf8Printable(result));
     };
 
     std::string str_;

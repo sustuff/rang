@@ -24,6 +24,10 @@ add_library(rang-lib
         src/ipc/connection_to_client_handler.cpp
         src/buffer/path_buffer.cpp
         src/meta.cpp
+        src/text/color.cpp
+        src/text/word.cpp
+        src/text/line.cpp
+        src/qt_operators.cpp
 )
 
 target_include_directories(rang-lib PUBLIC include)

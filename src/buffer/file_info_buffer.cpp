@@ -1,7 +1,7 @@
 #include "buffer/file_info_buffer.hpp"
 
-QVector<QString> FileInfoBuffer::getLines() {
-  QVector<QString> result;
+QVector<Line> FileInfoBuffer::getLines() {
+  QVector<Line> result;
 
   result.append(fileInfo.absoluteFilePath());
   result.append("owned by " + fileInfo.owner());
@@ -12,6 +12,7 @@ QVector<QString> FileInfoBuffer::getLines() {
 
 void FileInfoBuffer::update() {
   fileInfo = QFileInfo(m_path);
+  emit contentChanged();
 }
 
 #include "buffer/moc_file_info_buffer.cpp"

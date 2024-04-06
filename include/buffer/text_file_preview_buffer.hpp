@@ -10,7 +10,7 @@ class TextFilePreviewBuffer : public PathBuffer {
 
   public slots:
     void update() override;
-    QVector<QString> getLines() override;
+    QVector<Line> getLines() override;
 
   private:
     QString fileContent;
