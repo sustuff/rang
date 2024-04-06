@@ -2,6 +2,7 @@
 
 #include <QVariant>
 
+#include "compatibility.hpp"
 #include "ipc/messages/messages.hpp"
 #include "main_task.hpp"
 
