@@ -70,18 +70,15 @@ void MainTask::run() {
           m_appState->currentDir.path().c_str(), qUtf8Printable(result));
     };
 
-    SetCurrentDirCommand setCurrentDirCommand(m_appState);
-    SetPreviewFileCommand setPreviewFileCommand(m_appState);
-
     std::string str_;
     std::getline(std::cin, str_);
     QString str = QString::fromStdString(str_);
     if (str == ":q") {
       emit finished();
     } else if (str.startsWith(":o") or str.startsWith("cd")) {
-      setCurrentDirCommand.execute(str.split(" ")[1].toStdString());
+      SetCurrentDirCommand(m_appState, str.split(" ")[1].toStdString()).execute();
     } else if (str.startsWith(":p") or str.startsWith("p")) {
-      setPreviewFileCommand.execute(str.split(" ")[1].toStdString());
+      SetPreviewFileCommand(m_appState, str.split(" ")[1].toStdString()).execute();
     }
     draw();
   });

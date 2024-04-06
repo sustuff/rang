@@ -7,6 +7,8 @@ class Command {
   public:
     explicit Command(AppState* state);
 
+    virtual void execute() = 0;
+
   protected:
     AppState* m_state{};
 };

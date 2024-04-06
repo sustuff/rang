@@ -24,9 +24,9 @@ void ConnectionToClientHandlerThread::handleIncomingMessage(QVariant message) {
     return;
 
   if (auto msg = get_if<SetCurrentDirMessage>(&message); msg != nullptr) {
-    SetCurrentDirCommand(main_task->appState()).execute(msg->newPath.toStdString());
+    SetCurrentDirCommand(main_task->appState(), msg->newPath.toStdString()).execute();
   } else if (auto msg = get_if<SetPreviewFileMessage>(&message); msg != nullptr) {
-    SetPreviewFileCommand(main_task->appState()).execute(msg->newPath.toStdString());
+    SetPreviewFileCommand(main_task->appState(), msg->newPath.toStdString()).execute();
   } else {
     qDebug() << "unknown incoming message";
   }

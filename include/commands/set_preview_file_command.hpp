@@ -5,9 +5,12 @@
 
 class SetPreviewFileCommand : public Command {
   public:
-    using Command::Command;
+    SetPreviewFileCommand(AppState* state, std::filesystem::path newPath);
 
-    void execute(const std::filesystem::path& newPath);
+    void execute() override;
+
+  protected:
+    std::filesystem::path m_newPath;
 };
 
 #endif  // RANG_INCLUDE_COMMANDS_SET_PREVIEW_FILE_COMMAND_HPP_

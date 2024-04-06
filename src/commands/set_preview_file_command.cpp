@@ -1,7 +1,13 @@
 #include "commands/set_preview_file_command.hpp"
 
-void SetPreviewFileCommand::execute(const std::filesystem::path& newPath) {
+#include <utility>
+
+void SetPreviewFileCommand::execute() {
   QMutexLocker lock(&m_state->mutex);
 
-  m_state->previewPath.setPath(newPath);
+  m_state->previewPath.setPath(m_newPath);
+}
+
+SetPreviewFileCommand::SetPreviewFileCommand(AppState* state, std::filesystem::path newPath)
+    : Command(state), m_newPath(std::move(newPath)) {
 }
