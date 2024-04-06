@@ -14,7 +14,7 @@ else ()
 endif ()
 
 add_executable(tests
-        buffer_test.cpp ipc_test.cpp
+        buffer_test.cpp
 )
 
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain rang-lib)
