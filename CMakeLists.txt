@@ -21,6 +21,7 @@ add_library(rang-lib
         src/ipc/connection_handler.cpp
         src/ipc/messages/messages.cpp
         src/ipc/messages/set_current_dir_message.cpp
+        src/ipc/messages/authentication_message.cpp
         src/ipc/connection_to_client_handler.cpp
         src/buffer/path_buffer.cpp
         src/meta.cpp

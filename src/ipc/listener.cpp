@@ -11,7 +11,10 @@ Listener::Listener(QObject* parent) : QObject(parent) {
 
 void Listener::handleNewConnection() {
   QLocalSocket* socket = m_server->nextPendingConnection();
-  new ConnectionToClientHandler(socket, this);
+  auto thread = new ConnectionToClientHandlerThread(socket, this);
+  connect(thread, &ConnectionToClientHandlerThread::finished, thread,
+          &ConnectionToClientHandlerThread::deleteLater);
+  thread->start();
 }
 
 Listener::~Listener() {

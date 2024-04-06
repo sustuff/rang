@@ -86,4 +86,12 @@ AppState* MainTask::appState() const {
   return m_appState;
 }
 
+QMutex* MainTask::mutex() const {
+  return m_mutex;
+}
+
+QString MainTask::getRemoteControlToken() const {
+  return m_remoteControlToken;
+}
+
 #include "moc_main_task.cpp"
