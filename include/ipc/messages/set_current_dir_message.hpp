@@ -2,6 +2,7 @@
 #define RANG_SRC_IPC_MESSAGES_SET_CURRENT_DIR_MESSAGE_HPP_
 
 #include <QString>
+#include <QMetaType>
 
 /// Tells file manager to change it's current dir to newPath.
 struct SetCurrentDirMessage {

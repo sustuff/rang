@@ -2,8 +2,6 @@
 
 ConnectionHandlerThread::ConnectionHandlerThread(QLocalSocket* socketIn, QObject* parent)
     : QThread(parent), m_socket(socketIn) {
-  qInfo() << "connection handler called";
-
   connect(m_socket, &QLocalSocket::stateChanged, this,
           &ConnectionHandlerThread::onSocketStateChanged);
 }
@@ -22,7 +20,6 @@ void ConnectionHandlerThread::run() {
     if (!msg.isValid()) {
       break;
     }
-    qInfo() << "Got message" << msg;
     handleIncomingMessage(msg);
   }
 }

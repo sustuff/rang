@@ -5,29 +5,30 @@ find_package(Qt6 REQUIRED COMPONENTS Core Network)
 qt_standard_project_setup()
 
 add_library(rang-lib
-        src/main_task.cpp
         src/app_state.cpp
         src/buffer/buffer.cpp
-        src/buffer/file_list_buffer.cpp
-        src/register/register.cpp
-        src/register/path_register.cpp
         src/buffer/file_info_buffer.cpp
-        src/renderer/renderer.cpp
-        src/renderer/terminal_renderer.cpp
+        src/buffer/file_list_buffer.cpp
+        src/buffer/path_buffer.cpp
         src/buffer/text_file_preview_buffer.cpp
-        src/renderer/text_renderer.cpp
-        src/ipc/listener.cpp
+        src/client_main.cpp
         src/client_task.cpp
         src/ipc/connection_handler.cpp
+        src/ipc/connection_to_client_handler.cpp
+        src/ipc/listener.cpp
+        src/ipc/messages/authentication_message.cpp
         src/ipc/messages/messages.cpp
         src/ipc/messages/set_current_dir_message.cpp
-        src/ipc/messages/authentication_message.cpp
-        src/ipc/connection_to_client_handler.cpp
-        src/buffer/path_buffer.cpp
+        src/ipc/messages/set_preview_file_message.cpp
+        src/main_task.cpp
         src/meta.cpp
-        src/client_main.cpp
         src/normal_main.cpp
         src/register/current_dir_register.cpp
+        src/register/path_register.cpp
+        src/register/register.cpp
+        src/renderer/renderer.cpp
+        src/renderer/terminal_renderer.cpp
+        src/renderer/text_renderer.cpp
 )
 
 target_include_directories(rang-lib PUBLIC include)

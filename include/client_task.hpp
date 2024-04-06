@@ -10,7 +10,7 @@ class ClientTask : public QObject {
     using QObject::QObject;
 
   public slots:
-    void run(const QString& newPath, const QString& token);
+    void run(const QString& token, const QVariant& message);
 
   signals:
     void finished();
