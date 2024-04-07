@@ -16,6 +16,9 @@ class AppState : public QObject {
     QList<PathRegister> selectedPaths;
 
     mutable QMutex mutex;
+
+  signals:
+    void finished();
 };
 
 #endif  // RANG_SRC_APP_STATE_HPP_

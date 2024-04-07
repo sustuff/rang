@@ -1,10 +1,7 @@
 #include "main_task.hpp"
-#include <commands/set_preview_file_command.hpp>
-#include <iostream>
 #include "buffer/text_file_preview_buffer.hpp"
-#include "commands/set_current_dir_command.hpp"
 #include "renderer/text_renderer.hpp"
-#include "term/terminal.hpp"
+#include "user_input.hpp"
 
 MainTask* MainTask::instance() {
   return MainTask::self;
@@ -28,6 +25,8 @@ void MainTask::run() {
   auto* fileInfoBuffer = new FileInfoBuffer(this);
   auto* previewBuffer = new TextFilePreviewBuffer(this);
 
+  auto* userInput = new UserInput(m_appState, fileListBuffer);
+
   connect(&m_appState->currentDir, &PathRegister::changed, fileListBuffer,
           &FileListBuffer::setPath);
   auto* watcher = new QFileSystemWatcher(this);
@@ -47,8 +46,7 @@ void MainTask::run() {
   m_appState->currentDir.setPath(".");
   m_appState->previewPath.setPath("");
 
-  auto* term = new term::terminal;
-  connect(this, &MainTask::destroyed, [=]() { delete term; });
+  term = std::make_unique<term::terminal>();
 
   auto* fileListRenderer = new TextRenderer(fileListBuffer);
   auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer);
@@ -56,25 +54,13 @@ void MainTask::run() {
 
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
-  connect(notifier, &QSocketNotifier::activated, [=, this]() {
-    auto draw = [&]() {
-      fileListBuffer->update();
-      fileInfoBuffer->update();
-      previewBuffer->update();
-    };
+  connect(notifier, &QSocketNotifier::activated, userInput, &UserInput::handleChar);
 
-    std::string str_;
-    std::getline(std::cin, str_);
-    QString str = QString::fromStdString(str_);
-    if (str == ":q") {
-      emit finished();
-    } else if (str.startsWith(":o") or str.startsWith("cd")) {
-      SetCurrentDirCommand(m_appState, str.split(" ")[1].toStdString()).execute();
-    } else if (str.startsWith(":p") or str.startsWith("p")) {
-      SetPreviewFileCommand(m_appState, str.split(" ")[1].toStdString()).execute();
-    }
-    draw();
-  });
+  connect(m_appState, &AppState::finished, [this]() { emit finished(); });
+
+  fileListBuffer->update();
+  fileInfoBuffer->update();
+  previewBuffer->update();
 }
 
 AppState* MainTask::appState() const {

@@ -38,6 +38,7 @@ add_library(rang-lib
         src/commands/command.cpp
         src/commands/set_current_dir_command.cpp
         src/commands/set_preview_file_command.cpp
+        src/user_input.cpp
 )
 
 target_include_directories(rang-lib PUBLIC include)
