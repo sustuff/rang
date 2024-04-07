@@ -1,6 +1,6 @@
 #include "main_task.hpp"
-#include "buffer/command_buffer.hpp"
 #include "buffer/text_file_preview_buffer.hpp"
+#include "renderer/command_renderer.hpp"
 #include "renderer/text_renderer.hpp"
 #include "user_input.hpp"
 
@@ -25,9 +25,6 @@ void MainTask::run() {
   auto* fileListBuffer = new FileListBuffer(this);
   auto* fileInfoBuffer = new FileInfoBuffer(this);
   auto* filePreviewBuffer = new TextFilePreviewBuffer(this);
-  auto* commandBuffer = new CommandBuffer(this);
-
-  auto* userInput = new UserInput(m_appState, fileListBuffer);
 
   connect(&m_appState->currentDir, &PathRegister::changed, fileListBuffer,
           &FileListBuffer::setPath);
@@ -44,10 +41,6 @@ void MainTask::run() {
   connect(&m_appState->previewPath, &PathRegister::changed, filePreviewBuffer,
           &TextFilePreviewBuffer::setPath);
   connect(watcher, &QFileSystemWatcher::directoryChanged, fileListBuffer, &FileListBuffer::update);
-  connect(userInput, &UserInput::currentCommandChanged, [=]() {
-//    qInfo() << "COMMAND CHANGED" << userInput->currentCommand();
-    commandBuffer->setInput(userInput->currentCommand());
-  });
 
   m_appState->currentDir.setPath(".");
   m_appState->previewPath.setPath("");
@@ -65,7 +58,12 @@ void MainTask::run() {
   auto* fileListRenderer = new TextRenderer(fileListBuffer, fileListWindow);
   auto* filePreviewRenderer = new TextRenderer(filePreviewBuffer, filePreviewWindow);
   auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer, fileInfoWindow);
-  auto* commandRenderer = new TextRenderer(commandBuffer, commandWindow);
+  auto* commandRenderer = new CommandRenderer(commandWindow);
+
+  auto* userInput = new UserInput(m_appState, fileListBuffer);
+  connect(userInput, &UserInput::hasReset, commandRenderer, &CommandRenderer::reset);
+  connect(userInput, &UserInput::gotChar, commandRenderer, &CommandRenderer::putChar);
+  connect(userInput, &UserInput::gotPopBack, commandRenderer, &CommandRenderer::popBack);
 
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);

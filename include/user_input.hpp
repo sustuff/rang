@@ -10,10 +10,12 @@ class UserInput : public QObject {
   public:
     UserInput(AppState* appState, FileListBuffer* fileListBuffer);
 
-    const QString& currentCommand();
+    const std::string& currentCommand();
 
   signals:
-    void currentCommandChanged();
+    void gotChar(char);
+    void hasReset();
+    void gotPopBack();
 
   public slots:
     void handleChar();
@@ -22,7 +24,7 @@ class UserInput : public QObject {
     AppState* m_appState;
     FileListBuffer* m_fileListBuffer;
     KeystrokeParser m_parser;
-    QString m_currentCommand;
+    std::string m_currentCommand;
 
     void handleCommand();
     void goToParentDir();

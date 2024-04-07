@@ -14,36 +14,43 @@ UserInput::UserInput(AppState* appState, FileListBuffer* fileListBuffer)
   m_parser.registerKeystroke({k}, [this]() { goUp(); });
 }
 
-const QString& UserInput::currentCommand() {
+const std::string& UserInput::currentCommand() {
   return m_currentCommand;
 }
 
 void UserInput::handleChar() {
   char key = std::getchar();
-  if (m_currentCommand.isEmpty() && key != ':') {
+  if (m_currentCommand.empty() && key != ':') {
     m_parser.nextKeyCombination(simpleKeyCombination(key));
   } else if (key == '\n') {
     handleCommand();
+  } else if (key == 0x7F) {
+    m_currentCommand.pop_back();
+    emit gotPopBack();
   } else if (key == 0x1b) {
     // Esc
     m_currentCommand.clear();
-    emit currentCommandChanged();
+    emit hasReset();
   } else {
-    m_currentCommand.append(key);
-    emit currentCommandChanged();
+    m_currentCommand.push_back(key);
+    emit gotChar(key);
   }
 }
 
 void UserInput::handleCommand() {
-  if (m_currentCommand.startsWith(":q")) {
+  if (m_currentCommand.starts_with(":q")) {
     emit m_appState->finished();
-  } else if (m_currentCommand.startsWith(":o")) {
-    SetCurrentDirCommand(m_appState, m_currentCommand.split(" ")[1].toStdString()).execute();
-  } else if (m_currentCommand.startsWith(":p")) {
-    SetPreviewFileCommand(m_appState, m_currentCommand.split(" ")[1].toStdString()).execute();
+  } else if (m_currentCommand.starts_with(":o")) {
+    SetCurrentDirCommand(m_appState,
+                         QString::fromStdString(m_currentCommand).split(" ")[1].toStdString())
+        .execute();
+  } else if (m_currentCommand.starts_with(":p")) {
+    SetPreviewFileCommand(m_appState,
+                          QString::fromStdString(m_currentCommand).split(" ")[1].toStdString())
+        .execute();
   }
   m_currentCommand.clear();
-  emit currentCommandChanged();
+  emit hasReset();
 }
 
 void UserInput::goToParentDir() {

@@ -19,7 +19,7 @@ terminal::terminal() : stream(std::cout) {
   // disable echo and buffering
   tcgetattr(fileno(stdout), &initial_ios);
   ios::termios current = initial_ios;
-  current.c_lflag &= (~ECHO & ~ICANON);
+  current.c_lflag &= ~(ECHO | ICANON);
   tcsetattr(fileno(stdout), TCSANOW, &current);
 
   // set initial terminal size
