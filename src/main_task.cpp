@@ -47,10 +47,12 @@ void MainTask::run() {
   m_appState->previewPath.setPath("");
 
   term = std::make_unique<term::terminal>();
+  auto fileListWindow = std::make_shared<term::window>(
+      *term, term::window_dimensions{0, 0, term->width(), term->height()});
 
-  auto* fileListRenderer = new TextRenderer(fileListBuffer);
-  auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer);
-  auto* previewRenderer = new TextRenderer(previewBuffer);
+  auto* fileListRenderer = new TextRenderer(fileListBuffer, fileListWindow);
+  //  auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer);
+  //  auto* previewRenderer = new TextRenderer(previewBuffer);
 
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);

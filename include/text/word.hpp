@@ -23,7 +23,7 @@ class Word {
     quint16 size() const;
     bool isEmpty() const;
 
-    std::string print(int y) const;
+    std::string print() const;
 };
 
 std::weak_ordering operator<=>(const Word&, const Word&);

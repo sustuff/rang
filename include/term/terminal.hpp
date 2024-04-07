@@ -1,11 +1,27 @@
-#ifndef RANG_TERMINAL_HPP_
-#define RANG_TERMINAL_HPP_
+#ifndef RANG_TERM_TERMINAL_HPP_
+#define RANG_TERM_TERMINAL_HPP_
 
 namespace term {
 
 namespace ios {
 #include <termios.h>
 }
+
+class terminal_stream {
+  private:
+    std::ostream& raw;
+
+  public:
+    terminal_stream(std::ostream& raw);
+
+    template <typename T>
+    terminal_stream& operator<<(const T& x) {
+      raw << x;
+      return *this;
+    }
+
+    terminal_stream& operator<<(std::ostream& (*func)(std::ostream&));
+};
 
 class terminal {
   private:
@@ -17,6 +33,8 @@ class terminal {
     static void resize(int);
 
   public:
+    terminal_stream stream;
+
     terminal();
 
     terminal(const terminal& other) = delete;
@@ -26,10 +44,8 @@ class terminal {
     int width() const;
 
     int height() const;
-
-    operator std::ostream&() const;
 };
 
 }  // namespace term
 
-#endif  // RANG_TERMINAL_HPP_
+#endif  // RANG_TERM_TERMINAL_HPP_

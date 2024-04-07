@@ -1,6 +1,7 @@
 #include "text/color.hpp"
+#include "term/manip.hpp"
 
-Color::Color() : Color{100, 100, 100, 255} {
+Color::Color() : Color{255, 255, 255, 255} {
 }
 
 Color::Color(quint8 red, quint8 green, quint8 blue, quint8 alpha)
@@ -23,6 +24,6 @@ quint8 Color::alpha() const {
   return alpha_;
 }
 
-std::string Color::print(int y) const {
-  return term::modifiers::move(0, y) + term::modifiers::true_color(false, red_, green_, blue_);
+std::string Color::print() const {
+  return term::manip::true_color(false, red_, green_, blue_);
 }

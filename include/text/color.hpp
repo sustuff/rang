@@ -1,8 +1,6 @@
 #ifndef RANG_INCLUDE_TEXT_COLOR_HPP_
 #define RANG_INCLUDE_TEXT_COLOR_HPP_
 
-#include "term/modifiers.hpp"
-
 class Color {
     quint8 red_;
     quint8 green_;
@@ -20,7 +18,7 @@ class Color {
     quint8 blue() const;
     quint8 alpha() const;
 
-    std::string print(int y) const;
+    std::string print() const;
 };
 
 #endif  // RANG_INCLUDE_TEXT_COLOR_HPP_

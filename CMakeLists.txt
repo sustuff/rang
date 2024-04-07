@@ -23,6 +23,8 @@ add_library(rang-lib
         src/main_task.cpp
         src/meta.cpp
         src/term/terminal.cpp
+        src/term/manip.cpp
+        src/term/window.cpp
         src/normal_main.cpp
         src/register/path_register.cpp
         src/register/register.cpp

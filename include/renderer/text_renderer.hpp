@@ -3,14 +3,16 @@
 
 #include "buffer/buffer.hpp"
 #include "renderer.hpp"
+#include "term/window.hpp"
 
 class TextRenderer : public Renderer {
     Q_OBJECT
   private:
     Buffer* buffer;
+    std::shared_ptr<term::window> window;
 
   public:
-    TextRenderer(Buffer* buffer);
+    TextRenderer(Buffer* buffer, std::shared_ptr<term::window> window);
 
   public slots:
     void update();
