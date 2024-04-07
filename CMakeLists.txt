@@ -38,7 +38,7 @@ add_library(rang-lib
         src/keystroke_parser.cpp
 )
 
-target_include_directories(rang-lib PUBLIC include PUBLIC third_party)
+target_include_directories(rang-lib PUBLIC include)
 target_compile_features(rang-lib PRIVATE cxx_std_20)
 target_link_libraries(rang-lib PUBLIC Qt6::Core Qt6::Network)
 target_precompile_headers(rang-lib PUBLIC <QtCore> <QtNetwork>)

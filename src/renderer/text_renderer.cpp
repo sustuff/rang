@@ -1,6 +1,5 @@
 #include "renderer/text_renderer.hpp"
 #include <iostream>
-#include "termcolor.hpp"
 
 TextRenderer::TextRenderer(Buffer* buffer) : Renderer{buffer}, buffer{buffer} {
   connect(buffer, &Buffer::contentChanged, this, &TextRenderer::update);
@@ -8,11 +7,13 @@ TextRenderer::TextRenderer(Buffer* buffer) : Renderer{buffer}, buffer{buffer} {
 }
 
 void TextRenderer::update() {
+  int y = 0;
   for (const Line& line : buffer->getLines()) {
     for (const Word& word : line.getPrefix(80).getWords()) {
-      std::cout << word;
+      std::cout << word.print(y);
     }
-    std::cout << termcolor::reset << std::endl;
+    std::cout << std::endl;
+    ++y;
   }
 }
 

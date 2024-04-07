@@ -22,3 +22,7 @@ quint8 Color::blue() const {
 quint8 Color::alpha() const {
   return alpha_;
 }
+
+std::string Color::print(int y) const {
+  return term::modifiers::move(0, y) + term::modifiers::true_color(false, red_, green_, blue_);
+}

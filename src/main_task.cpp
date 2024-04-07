@@ -2,6 +2,7 @@
 #include <iostream>
 #include "buffer/text_file_preview_buffer.hpp"
 #include "renderer/text_renderer.hpp"
+#include "term/terminal.hpp"
 
 MainTask* MainTask::instance() {
   return MainTask::self;
@@ -45,9 +46,12 @@ void MainTask::run() {
   m_appState->currentDir.setPath(".");
   m_appState->previewPath.setPath("");
 
-  TextRenderer* fileListRenderer = new TextRenderer(fileListBuffer);
-  TextRenderer* fileInfoRenderer = new TextRenderer(fileInfoBuffer);
-  TextRenderer* previewRenderer = new TextRenderer(previewBuffer);
+  auto* term = new term::terminal;
+  connect(this, &MainTask::destroyed, [=]() { delete term; });
+
+  auto* fileListRenderer = new TextRenderer(fileListBuffer);
+  auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer);
+  auto* previewRenderer = new TextRenderer(previewBuffer);
 
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
