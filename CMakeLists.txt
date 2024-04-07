@@ -63,9 +63,11 @@ add_custom_target(rang-buildconfig ALL COMMAND ${CMAKE_COMMAND} -P
 target_include_directories(rang-lib PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/generated/")
 add_dependencies(rang-lib rang-buildconfig)
 
+add_custom_command(TARGET rang POST_BUILD COMMAND ${CMAKE_COMMAND} -E create_symlink rang ra)
+
 option(ENABLE_TESTING "Enable Catch2 tests" OFF)
 
-if(ENABLE_TESTING) 
-        enable_testing()
-        add_subdirectory(test)
-endif()
+if (ENABLE_TESTING)
+    enable_testing()
+    add_subdirectory(test)
+endif ()
