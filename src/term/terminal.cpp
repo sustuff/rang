@@ -31,13 +31,18 @@ terminal::~terminal() {
   tcsetattr(fileno(stdout), TCSANOW, &initial_ios);
 }
 
-int terminal::width;
-int terminal::height;
+int terminal::m_width;
+int terminal::m_height;
 
 void terminal::resize(int) {
   winsize ws;
   ioctl(1, TIOCGWINSZ, &ws);
-  terminal::width = ws.ws_col;
-  terminal::height = ws.ws_row;
+  terminal::m_width = ws.ws_col;
+  terminal::m_height = ws.ws_row;
 }
+
+terminal::operator std::ostream&() const {
+  return std::cout;
+}
+
 }  // namespace term
