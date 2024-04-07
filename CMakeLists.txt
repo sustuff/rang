@@ -7,6 +7,7 @@ qt_standard_project_setup()
 add_library(rang-lib
         src/app_state.cpp
         src/buffer/buffer.cpp
+        src/buffer/command_buffer.cpp
         src/buffer/file_info_buffer.cpp
         src/buffer/file_list_buffer.cpp
         src/buffer/path_buffer.cpp

@@ -4,44 +4,51 @@
 #include "commands/set_preview_file_command.hpp"
 
 UserInput::UserInput(AppState* appState, FileListBuffer* fileListBuffer)
-    : QObject{appState}, appState{appState}, fileListBuffer{fileListBuffer} {
+    : QObject{appState}, m_appState{appState}, m_fileListBuffer{fileListBuffer} {
   QKeyCombination h{Qt::Key_H};
   QKeyCombination j{Qt::Key_J};
   QKeyCombination k{Qt::Key_K};
   QKeyCombination l{Qt::Key_L};
-  parser.registerKeystroke({h}, [this]() { goToParentDir(); });
-  parser.registerKeystroke({j}, [this]() { goDown(); });
-  parser.registerKeystroke({k}, [this]() { goUp(); });
+  m_parser.registerKeystroke({h}, [this]() { goToParentDir(); });
+  m_parser.registerKeystroke({j}, [this]() { goDown(); });
+  m_parser.registerKeystroke({k}, [this]() { goUp(); });
+}
+
+const QString& UserInput::currentCommand() {
+  return m_currentCommand;
 }
 
 void UserInput::handleChar() {
   char key = std::getchar();
-  if (currentCommand.isEmpty() && key != ':') {
-    parser.nextKeyCombination(simpleKeyCombination(key));
+  if (m_currentCommand.isEmpty() && key != ':') {
+    m_parser.nextKeyCombination(simpleKeyCombination(key));
   } else if (key == '\n') {
     handleCommand();
   } else if (key == 0x1b) {
     // Esc
-    currentCommand.clear();
+    m_currentCommand.clear();
+    emit currentCommandChanged();
   } else {
-    currentCommand.append(key);
+    m_currentCommand.append(key);
+    emit currentCommandChanged();
   }
 }
 
 void UserInput::handleCommand() {
-  if (currentCommand.startsWith(":q")) {
-    emit appState->finished();
-  } else if (currentCommand.startsWith(":o")) {
-    SetCurrentDirCommand(appState, currentCommand.split(" ")[1].toStdString()).execute();
-  } else if (currentCommand.startsWith(":p")) {
-    SetPreviewFileCommand(appState, currentCommand.split(" ")[1].toStdString()).execute();
+  if (m_currentCommand.startsWith(":q")) {
+    emit m_appState->finished();
+  } else if (m_currentCommand.startsWith(":o")) {
+    SetCurrentDirCommand(m_appState, m_currentCommand.split(" ")[1].toStdString()).execute();
+  } else if (m_currentCommand.startsWith(":p")) {
+    SetPreviewFileCommand(m_appState, m_currentCommand.split(" ")[1].toStdString()).execute();
   }
-  currentCommand.clear();
+  m_currentCommand.clear();
+  emit currentCommandChanged();
 }
 
 void UserInput::goToParentDir() {
-  appState->currentDir.setPath(
-      std::filesystem::canonical(appState->currentDir.path()).parent_path());
+  m_appState->currentDir.setPath(
+      std::filesystem::canonical(m_appState->currentDir.path()).parent_path());
 }
 
 void UserInput::goDown() {

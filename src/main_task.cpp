@@ -1,4 +1,5 @@
 #include "main_task.hpp"
+#include "buffer/command_buffer.hpp"
 #include "buffer/text_file_preview_buffer.hpp"
 #include "renderer/text_renderer.hpp"
 #include "user_input.hpp"
@@ -23,7 +24,8 @@ void MainTask::run() {
 
   auto* fileListBuffer = new FileListBuffer(this);
   auto* fileInfoBuffer = new FileInfoBuffer(this);
-  auto* previewBuffer = new TextFilePreviewBuffer(this);
+  auto* filePreviewBuffer = new TextFilePreviewBuffer(this);
+  auto* commandBuffer = new CommandBuffer(this);
 
   auto* userInput = new UserInput(m_appState, fileListBuffer);
 
@@ -39,20 +41,31 @@ void MainTask::run() {
           });
   connect(&m_appState->previewPath, &PathRegister::changed, fileInfoBuffer,
           &FileInfoBuffer::setPath);
-  connect(&m_appState->previewPath, &PathRegister::changed, previewBuffer,
+  connect(&m_appState->previewPath, &PathRegister::changed, filePreviewBuffer,
           &TextFilePreviewBuffer::setPath);
   connect(watcher, &QFileSystemWatcher::directoryChanged, fileListBuffer, &FileListBuffer::update);
+  connect(userInput, &UserInput::currentCommandChanged, [=]() {
+//    qInfo() << "COMMAND CHANGED" << userInput->currentCommand();
+    commandBuffer->setInput(userInput->currentCommand());
+  });
 
   m_appState->currentDir.setPath(".");
   m_appState->previewPath.setPath("");
 
   term = std::make_unique<term::terminal>();
   auto fileListWindow = std::make_shared<term::window>(
-      *term, term::window_dimensions{0, 0, term->width(), term->height()});
-
+      *term, term::window_dimensions{0, 0, term->width() / 2, term->height() - 1});
+  auto filePreviewWindow = std::make_shared<term::window>(
+      *term, term::window_dimensions{term->width() / 2, 4, term->width() - term->width() / 2,
+                                     term->height() - 5});
+  auto fileInfoWindow = std::make_shared<term::window>(
+      *term, term::window_dimensions{term->width() / 2, 0, term->width() - term->width() / 2, 4});
+  auto commandWindow = std::make_shared<term::window>(
+      *term, term::window_dimensions{0, term->height() - 2, term->width(), 1});
   auto* fileListRenderer = new TextRenderer(fileListBuffer, fileListWindow);
-  //  auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer);
-  //  auto* previewRenderer = new TextRenderer(previewBuffer);
+  auto* filePreviewRenderer = new TextRenderer(filePreviewBuffer, filePreviewWindow);
+  auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer, fileInfoWindow);
+  auto* commandRenderer = new TextRenderer(commandBuffer, commandWindow);
 
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
@@ -62,7 +75,7 @@ void MainTask::run() {
 
   fileListBuffer->update();
   fileInfoBuffer->update();
-  previewBuffer->update();
+  filePreviewBuffer->update();
 }
 
 AppState* MainTask::appState() const {
