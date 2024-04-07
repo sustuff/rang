@@ -24,7 +24,6 @@ add_library(rang-lib
         src/meta.cpp
         src/term/terminal.cpp
         src/normal_main.cpp
-        src/register/current_dir_register.cpp
         src/register/path_register.cpp
         src/register/register.cpp
         src/renderer/renderer.cpp
@@ -36,6 +35,9 @@ add_library(rang-lib
         src/qt_operators.cpp
         src/utility/trie.cpp
         src/keystroke_parser.cpp
+        src/commands/command.cpp
+        src/commands/set_current_dir_command.cpp
+        src/commands/set_preview_file_command.cpp
 )
 
 target_include_directories(rang-lib PUBLIC include)

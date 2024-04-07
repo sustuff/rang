@@ -1,6 +1,8 @@
 #include "main_task.hpp"
+#include <commands/set_preview_file_command.hpp>
 #include <iostream>
 #include "buffer/text_file_preview_buffer.hpp"
+#include "commands/set_current_dir_command.hpp"
 #include "renderer/text_renderer.hpp"
 #include "term/terminal.hpp"
 
@@ -32,7 +34,6 @@ void MainTask::run() {
 
   connect(&m_appState->currentDir, &PathRegister::changed,
           [watcher](const std::filesystem::path& newPath) {
-            current_path(newPath);
             auto path = QString::fromStdString(newPath);
             watcher->removePath(path);
             watcher->addPath(path);
@@ -68,17 +69,16 @@ void MainTask::run() {
     if (str == ":q") {
       emit finished();
     } else if (str.startsWith(":o") or str.startsWith("cd")) {
-      m_appState->currentDir.setPath(str.split(" ")[1].toStdString());
-      m_appState->previewPath.setPath("");
+      SetCurrentDirCommand(m_appState, str.split(" ")[1].toStdString()).execute();
     } else if (str.startsWith(":p") or str.startsWith("p")) {
-      m_appState->previewPath.setPath(str.split(" ")[1].toStdString());
+      SetPreviewFileCommand(m_appState, str.split(" ")[1].toStdString()).execute();
     }
     draw();
   });
 }
 
-LockedAppState MainTask::appState() const {
-  return {m_appState, &m_mutex};
+AppState* MainTask::appState() const {
+  return m_appState;
 }
 
 QString MainTask::getRemoteControlToken() const {
