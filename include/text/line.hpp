@@ -3,9 +3,7 @@
 
 #include "word.hpp"
 
-class Line {
-    QVector<Word> words;
-
+class Line : public QVector<Word> {
   public:
     Line() = default;
     Line(const Line&) = default;
@@ -17,13 +15,7 @@ class Line {
 
     bool operator==(const Line&) const = default;
 
-    const QVector<Word>& getWords() const;
     Line getPrefix(quint16 prefixSize) const;
-
-    template <typename... Args>
-    void emplaceBack(Args&&... args);
 };
-
-std::weak_ordering operator<=>(const Line&, const Line&);
 
 #endif  // RANG_INCLUDE_TEXT_LINE_HPP_
