@@ -40,11 +40,14 @@ Test:
   cache:
     <<: *global_cache
     policy: pull
+  variables:
+    TERM: "xterm-256color"
   script:
     - cd build && make test
   artifacts:
     when: always
     paths:
-      - build/test/report.xml
+      - build/Testing/*
     reports:
-      junit: build/test/report.xml
+      junit:
+        - build/test/report/*.xml

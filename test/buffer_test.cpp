@@ -57,9 +57,9 @@ TEST_CASE("buffer test") {
   SECTION("TextFilePreviewBuffer") {
     TextFilePreviewBuffer buffer;
     buffer.setPath(textFile1);
-    REQUIRE(buffer.getLines() == QVector<QString>{"Hello Sailor!", ""});
+    REQUIRE(buffer.getLines() == QVector<Line>{"Hello Sailor!", ""});
     buffer.setPath(textFile2);
-    REQUIRE(buffer.getLines() == QVector<QString>{"", "file", "", "2", ""});
+    REQUIRE(buffer.getLines() == QVector<Line>{"", "file", "", "2", ""});
   }
 
   SECTION("FileListBuffer") {
@@ -69,7 +69,7 @@ TEST_CASE("buffer test") {
         continue;
       }
 
-      QVector<QString> localFiles;
+      QVector<Line> localFiles;
       for (const directory_entry& localDirEntry : directory_iterator{dirEntry.path()}) {
         QString filename{localDirEntry.path().filename().c_str()};
         if (filename[0] != '.') {

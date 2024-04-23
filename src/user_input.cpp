@@ -1,0 +1,74 @@
+#include "user_input.hpp"
+#include <iostream>
+#include "commands/set_current_dir_command.hpp"
+#include "commands/set_preview_file_command.hpp"
+
+UserInput::UserInput(AppState* appState, FileListBuffer* fileListBuffer)
+    : QObject{appState}, m_appState{appState}, m_fileListBuffer{fileListBuffer} {
+  QKeyCombination h{Qt::Key_H};
+  QKeyCombination j{Qt::Key_J};
+  QKeyCombination k{Qt::Key_K};
+  QKeyCombination l{Qt::Key_L};
+  m_parser.registerKeystroke({h}, [this]() { goToParentDir(); });
+  m_parser.registerKeystroke({j}, [this]() { goDown(); });
+  m_parser.registerKeystroke({k}, [this]() { goUp(); });
+}
+
+const std::string& UserInput::currentCommand() {
+  return m_currentCommand;
+}
+
+void UserInput::handleChar() {
+  char key = std::getchar();
+  if (m_currentCommand.empty() && key != ':') {
+    m_parser.nextKeyCombination(simpleKeyCombination(key));
+  } else if (key == '\n') {
+    handleCommand();
+  } else if (key == 0x7F) {
+    m_currentCommand.pop_back();
+    emit gotPopBack();
+  } else if (key == 0x1b) {
+    // Esc
+    m_currentCommand.clear();
+    emit hasReset();
+  } else {
+    m_currentCommand.push_back(key);
+    emit gotChar(key);
+  }
+}
+
+void UserInput::handleCommand() {
+  if (m_currentCommand.starts_with(":q")) {
+    emit m_appState->finished();
+  } else if (m_currentCommand.starts_with(":o")) {
+    SetCurrentDirCommand(m_appState,
+                         QString::fromStdString(m_currentCommand).split(" ")[1].toStdString())
+        .execute();
+  } else if (m_currentCommand.starts_with(":p")) {
+    SetPreviewFileCommand(m_appState,
+                          QString::fromStdString(m_currentCommand).split(" ")[1].toStdString())
+        .execute();
+  }
+  m_currentCommand.clear();
+  emit hasReset();
+}
+
+void UserInput::goToParentDir() {
+  m_appState->currentDir.setPath(
+      std::filesystem::canonical(m_appState->currentDir.path()).parent_path());
+}
+
+void UserInput::goDown() {
+}
+
+void UserInput::goUp() {
+}
+
+QKeyCombination UserInput::simpleKeyCombination(char key) {
+  if ('a' <= key && key <= 'z') {
+    return static_cast<Qt::Key>(std::toupper(key));
+  }
+  return Qt::Key_unknown;
+}
+
+#include "moc_user_input.cpp"

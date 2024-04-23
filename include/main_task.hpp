@@ -7,6 +7,7 @@
 #include "buffer/file_info_buffer.hpp"
 #include "buffer/file_list_buffer.hpp"
 #include "ipc/listener.hpp"
+#include "term/terminal.hpp"
 
 /// Entry point in normal mode.
 class MainTask : public QObject {
@@ -19,6 +20,7 @@ class MainTask : public QObject {
     static MainTask* instance();
 
     AppState* appState() const;
+    QString getRemoteControlToken() const;
 
   public slots:
     void run();
@@ -32,6 +34,10 @@ class MainTask : public QObject {
     AppState* m_appState{};
     Listener* m_listener{};
     //    QList<Buffer*> bufferList;
+
+    std::unique_ptr<term::terminal> term{};
+
+    QString m_remoteControlToken{"token123"};
 };
 
 #endif  // RANG_SRC_MAIN_TASK_HPP_

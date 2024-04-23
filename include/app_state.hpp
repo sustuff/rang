@@ -14,6 +14,11 @@ class AppState : public QObject {
     PathRegister currentDir;
     PathRegister previewPath;
     QList<PathRegister> selectedPaths;
+
+    mutable QMutex mutex;
+
+  signals:
+    void finished();
 };
 
 #endif  // RANG_SRC_APP_STATE_HPP_

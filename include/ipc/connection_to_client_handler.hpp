@@ -4,12 +4,15 @@
 #include "connection_handler.hpp"
 
 /// Created by Listener class.
-class ConnectionToClientHandler : public ConnectionHandler {
+class ConnectionToClientHandlerThread : public ConnectionHandlerThread {
     Q_OBJECT
   public:
-    using ConnectionHandler::ConnectionHandler;
+    using ConnectionHandlerThread::ConnectionHandlerThread;
 
-    void handleIncomingMessage(QByteArray data) override;
+    void handleIncomingMessage(QVariant msg) override;
+
+  private:
+    bool authenticated_{};
 };
 
 #endif  // RANG_SRC_IPC_CONNECTION_TO_CLIENT_HANDLER_HPP_

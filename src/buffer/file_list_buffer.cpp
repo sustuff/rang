@@ -1,7 +1,7 @@
 #include "buffer/file_list_buffer.hpp"
 
-QVector<QString> FileListBuffer::getLines() {
-  QVector<QString> result;
+QVector<Line> FileListBuffer::getLines() {
+  QVector<Line> result;
 
   for (const auto& file_info : fileList) {
     result.append(file_info.fileName());
@@ -16,6 +16,7 @@ void FileListBuffer::update() {
   for (const auto& entry : dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries, QDir::Name)) {
     fileList.append(entry);
   }
+  emit contentChanged();
 }
 
 #include "buffer/moc_file_list_buffer.cpp"

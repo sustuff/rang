@@ -8,7 +8,7 @@ class FileListBuffer : public PathBuffer {
   public:
     using PathBuffer::PathBuffer;
 
-    QVector<QString> getLines() override;
+    QVector<Line> getLines() override;
 
   public slots:
     void update() override;
