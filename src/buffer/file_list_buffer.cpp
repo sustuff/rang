@@ -3,8 +3,8 @@
 QVector<Line> FileListBuffer::getLines() {
   QVector<Line> result;
 
-  for (const auto& file_info : fileList) {
-    result.append(file_info.fileName());
+  for (const auto& fileInfo : fileList) {
+    result.append(Word::fromFileInfo(fileInfo));
   }
 
   return result;

@@ -24,6 +24,8 @@ class Word {
     bool isEmpty() const;
 
     std::string print() const;
+
+    static Word fromFileInfo(const QFileInfo&);
 };
 
 std::weak_ordering operator<=>(const Word&, const Word&);

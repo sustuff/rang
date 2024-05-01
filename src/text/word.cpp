@@ -32,6 +32,10 @@ std::string Word::print() const {
   return color.print() + content.toStdString() + term::manip::reset_color;
 }
 
+Word Word::fromFileInfo(const QFileInfo& fileInfo) {
+  return Word{fileInfo.fileName(), Color::fromFileInfo(fileInfo)};
+}
+
 std::weak_ordering operator<=>(const Word& left, const Word& right) {
   return left.getContent() <=> right.getContent();
 }
