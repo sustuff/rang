@@ -18,6 +18,7 @@ class UserInput : public QObject {
     void gotPopBack();
     void goDown();
     void goUp();
+    void goToChildDir();
 
   public slots:
     void handleChar();

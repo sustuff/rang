@@ -69,6 +69,16 @@ void MainTask::run() {
   connect(userInput, &UserInput::gotPopBack, commandRenderer, &CommandRenderer::popBack);
   connect(userInput, &UserInput::goDown, fileListBuffer, &FileListBuffer::goDown);
   connect(userInput, &UserInput::goUp, fileListBuffer, &FileListBuffer::goUp);
+  connect(userInput, &UserInput::goToChildDir, [this, fileListBuffer = fileListBuffer]() {
+    if (fileListBuffer) {
+      auto currentFile = fileListBuffer->getCurrentFile();
+      namespace fs = std::filesystem;
+      if (currentFile.has_value() &&
+          fs::status(currentFile.value()).type() == fs::file_type::directory) {
+        m_appState->currentDir.setPath(std::move(currentFile.value()));
+      }
+    }
+  });
 
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
