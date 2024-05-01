@@ -1,7 +1,7 @@
 #include "text/color.hpp"
 #include "term/manip.hpp"
 
-Color::Color() : isDefault_{true} {
+Color::Color() : red_{0}, green_{0}, blue_{0}, alpha_{0}, isDefault_{true} {
 }
 
 Color::Color(quint8 red, quint8 green, quint8 blue, quint8 alpha)

@@ -73,7 +73,15 @@ TEST_CASE("buffer test") {
       for (const directory_entry& localDirEntry : directory_iterator{dirEntry.path()}) {
         QString filename{localDirEntry.path().filename().c_str()};
         if (filename[0] != '.') {
-          localFiles.push_back(localDirEntry.path().filename().c_str());
+          Color color;
+          perms filePerms = status(localDirEntry.path()).permissions();
+          if (localDirEntry.is_directory()) {
+            color = Color::DIR_COLOR;
+          } else if ((filePerms & (perms::owner_exec | perms::group_exec | perms::others_exec)) !=
+                     perms::none) {
+            color = Color::EXECUTABLE_COLOR;
+          }
+          localFiles.push_back(Word{filename, color});
         }
       }
       std::sort(localFiles.begin(), localFiles.end());
