@@ -77,14 +77,17 @@ TEST_CASE("buffer test") {
           perms filePerms = status(localDirEntry.path()).permissions();
           if (localDirEntry.is_directory()) {
             color = Color::DIR_COLOR;
-          } else if ((filePerms & (perms::owner_exec | perms::group_exec | perms::others_exec)) !=
-                     perms::none) {
-            color = Color::EXECUTABLE_COLOR;
           }
           localFiles.push_back(Word{filename, color});
         }
       }
       std::sort(localFiles.begin(), localFiles.end());
+
+      if (!localFiles.isEmpty()) {
+        localFiles[0][0].setBackgroundColor(
+            localFiles[0][0].getColor().isDefault() ? Color::HIGHLIGHTED_COLOR : Color::DIR_COLOR);
+        localFiles[0][0].setColor(Color::WHITE);
+      }
 
       buffer.setPath(dirEntry.path());
       REQUIRE(buffer.getLines() == localFiles);

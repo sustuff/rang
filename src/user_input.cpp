@@ -10,8 +10,8 @@ UserInput::UserInput(AppState* appState, FileListBuffer* fileListBuffer)
   QKeyCombination k{Qt::Key_K};
   QKeyCombination l{Qt::Key_L};
   m_parser.registerKeystroke({h}, [this]() { goToParentDir(); });
-  m_parser.registerKeystroke({j}, [this]() { goDown(); });
-  m_parser.registerKeystroke({k}, [this]() { goUp(); });
+  m_parser.registerKeystroke({j}, [this]() { emit goDown(); });
+  m_parser.registerKeystroke({k}, [this]() { emit goUp(); });
 }
 
 const std::string& UserInput::currentCommand() {
@@ -56,12 +56,6 @@ void UserInput::handleCommand() {
 void UserInput::goToParentDir() {
   m_appState->currentDir.setPath(
       std::filesystem::canonical(m_appState->currentDir.path()).parent_path());
-}
-
-void UserInput::goDown() {
-}
-
-void UserInput::goUp() {
 }
 
 QKeyCombination UserInput::simpleKeyCombination(char key) {

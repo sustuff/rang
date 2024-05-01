@@ -19,6 +19,9 @@ class AppState : public QObject {
 
   signals:
     void finished();
+
+  public slots:
+    void setPreviewPath(std::optional<std::filesystem::path>);
 };
 
 #endif  // RANG_SRC_APP_STATE_HPP_

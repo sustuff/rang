@@ -1,6 +1,11 @@
 #include "text/color.hpp"
 #include "term/manip.hpp"
 
+const Color Color::WHITE{255, 255, 255, 255};
+const Color Color::DIR_COLOR{38, 139, 210, 255};
+const Color Color::EXECUTABLE_COLOR{133, 153, 0, 255};
+const Color Color::HIGHLIGHTED_COLOR{108, 113, 196, 255};
+
 Color::Color() : red_{0}, green_{0}, blue_{0}, alpha_{0}, isDefault_{true} {
 }
 
@@ -28,22 +33,22 @@ bool Color::isDefault() const {
   return isDefault_;
 }
 
-std::string Color::print() const {
+std::string Color::print(bool background) const {
   if (isDefault_) {
     return term::manip::reset_color;
   }
-  return term::manip::true_color(false, red_, green_, blue_);
+  return term::manip::true_color(background, red_, green_, blue_);
 }
 
-const Color Color::DIR_COLOR{38, 139, 210, 255};
-const Color Color::EXECUTABLE_COLOR{133, 153, 0, 255};
-
-Color Color::fromFileInfo(const QFileInfo& fileInfo) {
+Color Color::fromFileInfo(const QFileInfo& fileInfo, bool background) {
   if (fileInfo.isDir()) {
     return DIR_COLOR;
   }
   if (fileInfo.isExecutable()) {
     return EXECUTABLE_COLOR;
+  }
+  if (background) {
+    return HIGHLIGHTED_COLOR;
   }
   return {};
 }

@@ -16,6 +16,8 @@ class UserInput : public QObject {
     void gotChar(char);
     void hasReset();
     void gotPopBack();
+    void goDown();
+    void goUp();
 
   public slots:
     void handleChar();
@@ -28,8 +30,6 @@ class UserInput : public QObject {
 
     void handleCommand();
     void goToParentDir();
-    void goDown();
-    void goUp();
 
     static QKeyCombination simpleKeyCombination(char key);
 };

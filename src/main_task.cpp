@@ -60,10 +60,15 @@ void MainTask::run() {
   auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer, fileInfoWindow);
   auto* commandRenderer = new CommandRenderer(commandWindow);
 
+  connect(fileListBuffer, &FileListBuffer::currentFileChanged, m_appState,
+          &AppState::setPreviewPath);
+
   auto* userInput = new UserInput(m_appState, fileListBuffer);
   connect(userInput, &UserInput::hasReset, commandRenderer, &CommandRenderer::reset);
   connect(userInput, &UserInput::gotChar, commandRenderer, &CommandRenderer::putChar);
   connect(userInput, &UserInput::gotPopBack, commandRenderer, &CommandRenderer::popBack);
+  connect(userInput, &UserInput::goDown, fileListBuffer, &FileListBuffer::goDown);
+  connect(userInput, &UserInput::goUp, fileListBuffer, &FileListBuffer::goUp);
 
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);

@@ -22,11 +22,13 @@ class Color {
     quint8 alpha() const;
     bool isDefault() const;
 
-    std::string print() const;
+    std::string print(bool background) const;
 
+    static const Color WHITE;
     static const Color DIR_COLOR;
     static const Color EXECUTABLE_COLOR;
-    static Color fromFileInfo(const QFileInfo&);
+    static const Color HIGHLIGHTED_COLOR;
+    static Color fromFileInfo(const QFileInfo&, bool background);
 };
 
 #endif  // RANG_INCLUDE_TEXT_COLOR_HPP_
