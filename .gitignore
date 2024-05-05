@@ -1,10 +1,10 @@
 # ==== Project files
 /build
-/cmake-build-debug
-/cmake-build-release
+/cmake-build-*
 .idea
 .cache
 .vscode
+/.clion-env
 
 # ==== CMake files
 CMakeLists.txt.user
