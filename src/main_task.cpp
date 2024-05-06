@@ -60,10 +60,25 @@ void MainTask::run() {
   auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer, fileInfoWindow);
   auto* commandRenderer = new CommandRenderer(commandWindow);
 
+  connect(fileListBuffer, &FileListBuffer::currentFileChanged, m_appState,
+          &AppState::setPreviewPath);
+
   auto* userInput = new UserInput(m_appState, fileListBuffer);
   connect(userInput, &UserInput::hasReset, commandRenderer, &CommandRenderer::reset);
   connect(userInput, &UserInput::gotChar, commandRenderer, &CommandRenderer::putChar);
   connect(userInput, &UserInput::gotPopBack, commandRenderer, &CommandRenderer::popBack);
+  connect(userInput, &UserInput::goDown, fileListBuffer, &FileListBuffer::goDown);
+  connect(userInput, &UserInput::goUp, fileListBuffer, &FileListBuffer::goUp);
+  connect(userInput, &UserInput::goToChildDir, [this, fileListBuffer = fileListBuffer]() {
+    if (fileListBuffer) {
+      auto currentFile = fileListBuffer->getCurrentFile();
+      namespace fs = std::filesystem;
+      if (currentFile.has_value() &&
+          fs::status(currentFile.value()).type() == fs::file_type::directory) {
+        m_appState->currentDir.setPath(std::move(currentFile.value()));
+      }
+    }
+  });
 
   // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
