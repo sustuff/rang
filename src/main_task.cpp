@@ -55,8 +55,7 @@ void MainTask::run() {
   auto fileListWindow = std::make_unique<term::window>(*term, term::window_dimensions{});
   auto filePreviewWindow = std::make_unique<term::window>(*term, term::window_dimensions{});
   auto fileInfoWindow = std::make_unique<term::window>(*term, term::window_dimensions{});
-  auto commandWindow = std::make_unique<term::window>(
-      *term, term::window_dimensions{0, term->height() - 2, term->width(), 1});
+  auto commandWindow = std::make_unique<term::window>(*term, term::window_dimensions{});
 
   auto* fileListRenderer = new TextRenderer(fileListBuffer, std::move(fileListWindow));
   auto* filePreviewRenderer = new TextRenderer(filePreviewBuffer, std::move(filePreviewWindow));
@@ -73,9 +72,11 @@ void MainTask::run() {
       term::window_dimensions{0, 0, term->width(), term->height() - 1}, fileListLayout,
       new HorizontalLayout(term::window_dimensions{}, fileInfoLayout, filePreviewLayout, 0.1, this),
       0.5, this);
-  auto redrawLayout = [this, rootLayout] {
+  auto redrawLayout = [this, rootLayout, commandRenderer] {
     term::terminal::resize(0);
     rootLayout->setDimensions(term::window_dimensions{0, 0, term->width(), term->height() - 1});
+    commandRenderer->changeDimensions(
+        term::window_dimensions{0, term->height() - 1, term->width(), 1});
   };
   redrawLayout();
 
@@ -89,12 +90,11 @@ void MainTask::run() {
   connect(userInput, &UserInput::gotPopBack, commandRenderer, &CommandRenderer::popBack);
   connect(userInput, &UserInput::goDown, fileListBuffer, &FileListBuffer::goDown);
   connect(userInput, &UserInput::goUp, fileListBuffer, &FileListBuffer::goUp);
-  connect(userInput, &UserInput::goToChildDir, [this, fileListBuffer = fileListBuffer]() {
+  connect(userInput, &UserInput::goToChildDir, [this, fileListBuffer] {
     if (fileListBuffer) {
       auto selectedFile = fileListBuffer->getSelectedFile();
-      namespace fs = std::filesystem;
       if (selectedFile.has_value() &&
-          fs::status(selectedFile.value()).type() == fs::file_type::directory) {
+          status(selectedFile.value()).type() == std::filesystem::file_type::directory) {
         m_appState->currentDir.setPath(std::move(selectedFile.value()));
       }
     }
