@@ -1,8 +1,8 @@
 #ifndef RANG_SRC_REGISTER_PATH_REGISTER_HPP_
 #define RANG_SRC_REGISTER_PATH_REGISTER_HPP_
 
-#include "register.hpp"
 #include <filesystem>
+#include "register.hpp"
 
 class PathRegister : public Register {
     Q_OBJECT

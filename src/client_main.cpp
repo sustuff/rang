@@ -1,8 +1,8 @@
+#include <QCommandLineParser>
+#include <QTimer>
 #include "app_info.hpp"
 #include "client_task.hpp"
 #include "ipc/messages/messages.hpp"
-#include <QCommandLineParser>
-#include <QTimer>
 
 int clientMain(int argc, char* argv[]) {
   QCoreApplication app(argc, argv);

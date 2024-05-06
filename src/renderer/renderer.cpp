@@ -8,5 +8,4 @@ void Renderer::changeDimensions(const term::window_dimensions& dims) {
   m_window->change_dimensions(dims);
 }
 
-
 #include "renderer/moc_renderer.cpp"

@@ -57,8 +57,7 @@ void UserInput::handleCommand() {
 }
 
 void UserInput::goToParentDir() {
-  m_appState->currentDir.setPath(
-      canonical(m_appState->currentDir.path()).parent_path());
+  m_appState->currentDir.setPath(canonical(m_appState->currentDir.path()).parent_path());
 }
 
 QKeyCombination UserInput::simpleKeyCombination(char key) {

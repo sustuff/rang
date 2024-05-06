@@ -5,5 +5,4 @@ void Layout::setDimensions(const term::window_dimensions& dims) {
   recalculate();
 }
 
-
 #include "layout/moc_layout.cpp"

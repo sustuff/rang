@@ -18,5 +18,4 @@ void window::change_dimensions(const window_dimensions& dim) {
   dimensions = dim;
 }
 
-
 }  // namespace term

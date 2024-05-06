@@ -1,8 +1,8 @@
 #ifndef RANG_SRC_APP_INFO_HPP_
 #define RANG_SRC_APP_INFO_HPP_
 
-#include <QString>
 #include <QDateTime>
+#include <QString>
 #include <QTimeZone>
 #include "build_config.hpp"
 

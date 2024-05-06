@@ -1,9 +1,9 @@
 #include "term/terminal.hpp"
 #include "term/manip.hpp"
 
-#include <csignal>
 #include <sys/ioctl.h>
 #include <termios.h>
+#include <csignal>
 #include <iostream>
 
 namespace term {

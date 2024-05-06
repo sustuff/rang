@@ -27,5 +27,4 @@ void TextRenderer::refresh() {
   update();
 }
 
-
 #include "renderer/moc_text_renderer.cpp"

@@ -7,10 +7,10 @@ class HorizontalLayout : public Layout {
     Q_OBJECT
   public:
     explicit HorizontalLayout(const term::window_dimensions& dims,
-                            Layout* upper,
-                            Layout* lower,
-                            float ratio = 0.5,
-                            QObject* parent = nullptr);
+                              Layout* upper,
+                              Layout* lower,
+                              float ratio = 0.5,
+                              QObject* parent = nullptr);
 
     void recalculate() final;
 

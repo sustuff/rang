@@ -1,10 +1,10 @@
 #include "layout/horizontal_layout.hpp"
 
 HorizontalLayout::HorizontalLayout(const term::window_dimensions& dims,
-                               Layout* upper,
-                               Layout* lower,
-                               float ratio,
-                               QObject* parent)
+                                   Layout* upper,
+                                   Layout* lower,
+                                   float ratio,
+                                   QObject* parent)
     : Layout(parent), m_upper(upper), m_lower(lower), m_ratio(ratio) {
   setDimensions(dims);
 }
