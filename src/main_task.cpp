@@ -1,18 +1,20 @@
 #include "main_task.hpp"
+#include "app_info.hpp"
+#include "buffer/file_info_buffer.hpp"
 #include "buffer/text_file_preview_buffer.hpp"
 #include "renderer/command_renderer.hpp"
 #include "renderer/text_renderer.hpp"
 #include "user_input.hpp"
 
 MainTask* MainTask::instance() {
-  return MainTask::self;
+  return self;
 }
 
 MainTask::MainTask(QObject* parent) : QObject(parent) {
-  if (MainTask::self) {
+  if (self) {
     throw QException();  // only one instance is allowed
   }
-  MainTask::self = this;
+  self = this;
 }
 
 void MainTask::run() {

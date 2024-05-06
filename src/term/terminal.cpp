@@ -1,7 +1,7 @@
 #include "term/terminal.hpp"
 #include "term/manip.hpp"
 
-#include <signal.h>
+#include <csignal>
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <iostream>
@@ -23,7 +23,7 @@ terminal::terminal() : stream(std::cout) {
   tcsetattr(fileno(stdout), TCSANOW, &current);
 
   // set initial terminal size
-  terminal::resize(0);
+  resize(0);
 
   // handle terminal resize
   signal(SIGWINCH, terminal::resize);
@@ -52,8 +52,8 @@ int terminal::height() const {
 void terminal::resize(int) {
   winsize ws;
   ioctl(1, TIOCGWINSZ, &ws);
-  terminal::m_width = ws.ws_col;
-  terminal::m_height = ws.ws_row;
+  m_width = ws.ws_col;
+  m_height = ws.ws_row;
 }
 
 }  // namespace term

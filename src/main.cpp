@@ -1,5 +1,4 @@
-#include <QtCore>
-
+#include <QFileInfo>
 #include "app_info.hpp"
 #include "client_main.hpp"
 #include "meta.hpp"

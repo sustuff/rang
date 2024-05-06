@@ -2,10 +2,7 @@
 #define RANG_SRC_MAIN_TASK_HPP_
 
 #include <QtCore>
-#include "app_info.hpp"
 #include "app_state.hpp"
-#include "buffer/file_info_buffer.hpp"
-#include "buffer/file_list_buffer.hpp"
 #include "ipc/listener.hpp"
 #include "term/terminal.hpp"
 

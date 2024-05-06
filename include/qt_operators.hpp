@@ -1,8 +1,7 @@
 #ifndef RANG_INCLUDE_QT_OPERATORS_HPP_
 #define RANG_INCLUDE_QT_OPERATORS_HPP_
 
-#include <QtCore>
-#include <algorithm>
+#include <QList>
 
 std::strong_ordering operator<=>(const QString& left, const QString& right);
 

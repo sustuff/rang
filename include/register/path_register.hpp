@@ -2,6 +2,7 @@
 #define RANG_SRC_REGISTER_PATH_REGISTER_HPP_
 
 #include "register.hpp"
+#include <filesystem>
 
 class PathRegister : public Register {
     Q_OBJECT

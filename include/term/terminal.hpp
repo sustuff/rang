@@ -1,6 +1,8 @@
 #ifndef RANG_TERM_TERMINAL_HPP_
 #define RANG_TERM_TERMINAL_HPP_
 
+#include <ostream>
+
 namespace term {
 
 namespace ios {
