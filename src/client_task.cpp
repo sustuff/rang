@@ -1,10 +1,10 @@
 #include "client_task.hpp"
-#include "app_info.hpp"
+#include <QLocalSocket>
 #include "ipc/messages/messages.hpp"
 
 void ClientTask::run(const QString& token, const QVariant& message) {
   auto* socket = new QLocalSocket(this);
-  connect(socket, &QLocalSocket::connected, this, [=, this]() {
+  connect(socket, &QLocalSocket::connected, this, [=, this] {
     QDataStream stream(socket);
 
     stream << QVariant::fromValue(AuthenticationMessage{.token = token});

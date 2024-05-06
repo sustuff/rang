@@ -1,4 +1,5 @@
 #include "buffer/file_list_buffer.hpp"
+#include <QDir>
 
 QVector<Line> FileListBuffer::getLines() {
   QVector<Line> result;

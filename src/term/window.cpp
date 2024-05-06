@@ -14,4 +14,8 @@ window::window(terminal& term, const window_dimensions& dim)
     : dimensions(dim), stream(term.stream, dimensions) {
 }
 
+void window::change_dimensions(const window_dimensions& dim) {
+  dimensions = dim;
+}
+
 }  // namespace term

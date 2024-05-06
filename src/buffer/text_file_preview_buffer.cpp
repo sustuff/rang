@@ -1,8 +1,7 @@
 #include "buffer/text_file_preview_buffer.hpp"
 
 void TextFilePreviewBuffer::update() {
-  namespace fs = std::filesystem;
-  if (fs::status(m_path).type() == fs::file_type::regular) {
+  if (status(m_path).type() == std::filesystem::file_type::regular) {
     QFile file(m_path);
     file.open(QIODevice::ReadOnly);
     fileContent = file.readAll();
