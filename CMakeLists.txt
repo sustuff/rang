@@ -46,6 +46,7 @@ add_library(rang-lib
         src/layout/window_layout.cpp
         src/layout/vertical_layout.cpp
         src/layout/horizontal_layout.cpp
+        src/unix_signal.cpp
 )
 
 target_include_directories(rang-lib PUBLIC include)

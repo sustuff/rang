@@ -63,18 +63,27 @@ void MainTask::run() {
   auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer, std::move(fileInfoWindow));
   auto* commandRenderer = new CommandRenderer(std::move(commandWindow));
 
-  auto* fileListLayout = new WindowLayout(term::window_dimensions{}, fileListRenderer);
-  auto* filePreviewLayout = new WindowLayout(term::window_dimensions{}, filePreviewRenderer);
-  auto* fileInfoLayout = new WindowLayout(term::window_dimensions{}, fileInfoRenderer);
+  auto* fileListLayout =
+      new WindowLayout(term::window_dimensions{}, fileListRenderer, fileListRenderer);
+  auto* filePreviewLayout =
+      new WindowLayout(term::window_dimensions{}, filePreviewRenderer, filePreviewRenderer);
+  auto* fileInfoLayout =
+      new WindowLayout(term::window_dimensions{}, fileInfoRenderer, fileInfoRenderer);
   auto* rootLayout = new VerticalLayout(
       term::window_dimensions{0, 0, term->width(), term->height() - 1}, fileListLayout,
-      new HorizontalLayout(term::window_dimensions{}, fileInfoLayout, filePreviewLayout, 0.1));
-  rootLayout->recalculate();
+      new HorizontalLayout(term::window_dimensions{}, fileInfoLayout, filePreviewLayout, 0.1, this),
+      0.5, this);
+  auto redrawLayout = [this, rootLayout] {
+    term::terminal::resize(0);
+    rootLayout->setDimensions(term::window_dimensions{0, 0, term->width(), term->height() - 1});
+  };
+  redrawLayout();
 
-  connect(fileListBuffer, &FileListBuffer::currentFileChanged, m_appState,
+  connect(fileListBuffer, &FileListBuffer::selectedFileChanged, m_appState,
           &AppState::setPreviewPath);
 
   auto* userInput = new UserInput(m_appState, fileListBuffer);
+  connect(userInput, &UserInput::resized, redrawLayout);
   connect(userInput, &UserInput::hasReset, commandRenderer, &CommandRenderer::reset);
   connect(userInput, &UserInput::gotChar, commandRenderer, &CommandRenderer::putChar);
   connect(userInput, &UserInput::gotPopBack, commandRenderer, &CommandRenderer::popBack);
@@ -82,11 +91,11 @@ void MainTask::run() {
   connect(userInput, &UserInput::goUp, fileListBuffer, &FileListBuffer::goUp);
   connect(userInput, &UserInput::goToChildDir, [this, fileListBuffer = fileListBuffer]() {
     if (fileListBuffer) {
-      auto currentFile = fileListBuffer->getCurrentFile();
+      auto selectedFile = fileListBuffer->getSelectedFile();
       namespace fs = std::filesystem;
-      if (currentFile.has_value() &&
-          fs::status(currentFile.value()).type() == fs::file_type::directory) {
-        m_appState->currentDir.setPath(std::move(currentFile.value()));
+      if (selectedFile.has_value() &&
+          fs::status(selectedFile.value()).type() == fs::file_type::directory) {
+        m_appState->currentDir.setPath(std::move(selectedFile.value()));
       }
     }
   });
