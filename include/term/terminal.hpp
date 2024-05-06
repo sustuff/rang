@@ -32,9 +32,9 @@ class terminal {
 
     ios::termios initial_ios;
 
+  public:
     static void resize(int);
 
-  public:
     terminal_stream stream;
 
     terminal();

@@ -13,6 +13,7 @@ class UserInput : public QObject {
     const std::string& currentCommand();
 
   signals:
+    void resized();
     void gotChar(char);
     void hasReset();
     void gotPopBack();
