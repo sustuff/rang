@@ -6,10 +6,10 @@
 namespace term {
 
 struct window_dimensions {
-    int offset_x;
-    int offset_y;
-    int size_x;
-    int size_y;
+    int offset_x{};
+    int offset_y{};
+    int size_x{};
+    int size_y{};
 };
 
 class window_stream {
@@ -38,6 +38,8 @@ class window {
     window_stream stream;
 
     window(terminal& term, const window_dimensions& dim);
+
+    void change_dimensions(const window_dimensions& dim);
 };
 }  // namespace term
 
