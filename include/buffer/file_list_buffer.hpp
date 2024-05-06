@@ -10,10 +10,10 @@ class FileListBuffer : public PathBuffer {
     using PathBuffer::PathBuffer;
 
     QVector<Line> getLines() override;
-    std::optional<std::filesystem::path> getCurrentFile() const;
+    std::optional<std::filesystem::path> getSelectedFile() const;
 
   signals:
-    void currentFileChanged(std::optional<std::filesystem::path>);
+    void selectedFileChanged(std::optional<std::filesystem::path>);
 
   public slots:
     void update() override;
@@ -22,7 +22,8 @@ class FileListBuffer : public PathBuffer {
 
   private:
     QFileInfoList fileList;
-    quint32 currentFile = 0;
+    quint32 selectedFile = 0;  // Index of the file on which the cursor is currently located
+                               // If fileList.isEmpty(), then selectedFile = 0
 
     void sendUpdates();
 };

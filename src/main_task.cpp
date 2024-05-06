@@ -60,7 +60,7 @@ void MainTask::run() {
   auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer, fileInfoWindow);
   auto* commandRenderer = new CommandRenderer(commandWindow);
 
-  connect(fileListBuffer, &FileListBuffer::currentFileChanged, m_appState,
+  connect(fileListBuffer, &FileListBuffer::selectedFileChanged, m_appState,
           &AppState::setPreviewPath);
 
   auto* userInput = new UserInput(m_appState, fileListBuffer);
@@ -71,11 +71,11 @@ void MainTask::run() {
   connect(userInput, &UserInput::goUp, fileListBuffer, &FileListBuffer::goUp);
   connect(userInput, &UserInput::goToChildDir, [this, fileListBuffer = fileListBuffer]() {
     if (fileListBuffer) {
-      auto currentFile = fileListBuffer->getCurrentFile();
+      auto selectedFile = fileListBuffer->getSelectedFile();
       namespace fs = std::filesystem;
-      if (currentFile.has_value() &&
-          fs::status(currentFile.value()).type() == fs::file_type::directory) {
-        m_appState->currentDir.setPath(std::move(currentFile.value()));
+      if (selectedFile.has_value() &&
+          fs::status(selectedFile.value()).type() == fs::file_type::directory) {
+        m_appState->currentDir.setPath(std::move(selectedFile.value()));
       }
     }
   });
