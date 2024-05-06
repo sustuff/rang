@@ -12,7 +12,10 @@ void TextRenderer::update() {
   window->stream << term::manip::clear{};
   int y = 0;
   for (const Line& line : buffer->getLines()) {
-    window->stream << term::manip::move{1, ++y};
+    if (++y > window->stream.dimensions.size_y) {
+      break;
+    }
+    window->stream << term::manip::move{1, y};
     for (const Word& word : line.getPrefix(window->stream.dimensions.size_x)) {
       window->stream << word.print();
     }

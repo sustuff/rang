@@ -1,7 +1,10 @@
 #include "text/line.hpp"
 #include "qt_operators.hpp"
 
-Line::Line(const QString& content) : QVector<Word>{content} {
+Line::Line(const Word& content) : QVector<Word>{content} {
+}
+
+Line::Line(const QString& content) : Line{Word{content}} {
 }
 
 Line::Line(const char* content) : Line{QString{content}} {

@@ -6,24 +6,27 @@
 class Word {
     QString content;
     Color color;
+    Color backgroundColor;
 
   public:
-    Word(const Word&) = default;
-    Word(Word&&) = default;
-    Word(const QString& content, const Color& color = Color{});
-    Word& operator=(const Word&) = default;
-    Word& operator=(Word&&) = default;
+    Word(QString content, Color color = Color{}, Color backgroundColor = Color{});
 
     bool operator==(const Word&) const = default;
 
     QString getContent() const;
+    void setContent(QString);
     Color getColor() const;
+    void setColor(Color);
+    Color getBackgroundColor() const;
+    void setBackgroundColor(Color);
     Word getPrefix(quint16 prefixSize) const;
 
     quint16 size() const;
     bool isEmpty() const;
 
     std::string print() const;
+
+    static Word fromFileInfo(const QFileInfo&, bool selected);
 };
 
 std::weak_ordering operator<=>(const Word&, const Word&);

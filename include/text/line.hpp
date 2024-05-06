@@ -8,6 +8,7 @@ class Line : public QVector<Word> {
     Line() = default;
     Line(const Line&) = default;
     Line(Line&&) = default;
+    Line(const Word&);
     Line(const QString&);
     Line(const char*);
     Line& operator=(const Line&) = default;

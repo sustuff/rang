@@ -73,10 +73,21 @@ TEST_CASE("buffer test") {
       for (const directory_entry& localDirEntry : directory_iterator{dirEntry.path()}) {
         QString filename{localDirEntry.path().filename().c_str()};
         if (filename[0] != '.') {
-          localFiles.push_back(localDirEntry.path().filename().c_str());
+          Color color;
+          perms filePerms = status(localDirEntry.path()).permissions();
+          if (localDirEntry.is_directory()) {
+            color = Color::DIR_COLOR;
+          }
+          localFiles.push_back(Word{filename, color});
         }
       }
       std::sort(localFiles.begin(), localFiles.end());
+
+      if (!localFiles.isEmpty()) {
+        localFiles[0][0].setBackgroundColor(
+            localFiles[0][0].getColor().isDefault() ? Color::HIGHLIGHTED_COLOR : Color::DIR_COLOR);
+        localFiles[0][0].setColor(Color::WHITE);
+      }
 
       buffer.setPath(dirEntry.path());
       REQUIRE(buffer.getLines() == localFiles);

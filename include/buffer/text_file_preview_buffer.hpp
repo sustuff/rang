@@ -14,6 +14,8 @@ class TextFilePreviewBuffer : public PathBuffer {
 
   private:
     QString fileContent;
+
+    void normalizeFileContent();
 };
 
 #endif  // RANG_SRC_BUFFER_TEXT_FILE_PREVIEW_BUFFER_HPP_
