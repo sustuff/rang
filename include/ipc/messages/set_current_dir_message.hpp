@@ -9,7 +9,7 @@ struct SetCurrentDirMessage {
     QString newPath;
 };
 
-QDataStream& operator<<(QDataStream& in, const SetCurrentDirMessage& msg);
+QDataStream& operator<<(QDataStream& out, const SetCurrentDirMessage& msg);
 QDataStream& operator>>(QDataStream& in, SetCurrentDirMessage& msg);
 
 Q_DECLARE_METATYPE(SetCurrentDirMessage)

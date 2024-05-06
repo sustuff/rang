@@ -1,18 +1,23 @@
 #include "main_task.hpp"
+#include "app_info.hpp"
+#include "buffer/file_info_buffer.hpp"
 #include "buffer/text_file_preview_buffer.hpp"
+#include "layout/horizontal_layout.hpp"
+#include "layout/vertical_layout.hpp"
+#include "layout/window_layout.hpp"
 #include "renderer/command_renderer.hpp"
 #include "renderer/text_renderer.hpp"
 #include "user_input.hpp"
 
 MainTask* MainTask::instance() {
-  return MainTask::self;
+  return self;
 }
 
 MainTask::MainTask(QObject* parent) : QObject(parent) {
-  if (MainTask::self) {
+  if (self) {
     throw QException();  // only one instance is allowed
   }
-  MainTask::self = this;
+  self = this;
 }
 
 void MainTask::run() {
@@ -46,19 +51,25 @@ void MainTask::run() {
   m_appState->previewPath.setPath("");
 
   term = std::make_unique<term::terminal>();
-  auto fileListWindow = std::make_shared<term::window>(
-      *term, term::window_dimensions{0, 0, term->width() / 2, term->height() - 1});
-  auto filePreviewWindow = std::make_shared<term::window>(
-      *term, term::window_dimensions{term->width() / 2, 4, term->width() - term->width() / 2,
-                                     term->height() - 5});
-  auto fileInfoWindow = std::make_shared<term::window>(
-      *term, term::window_dimensions{term->width() / 2, 0, term->width() - term->width() / 2, 4});
-  auto commandWindow = std::make_shared<term::window>(
+
+  auto fileListWindow = std::make_unique<term::window>(*term, term::window_dimensions{});
+  auto filePreviewWindow = std::make_unique<term::window>(*term, term::window_dimensions{});
+  auto fileInfoWindow = std::make_unique<term::window>(*term, term::window_dimensions{});
+  auto commandWindow = std::make_unique<term::window>(
       *term, term::window_dimensions{0, term->height() - 2, term->width(), 1});
-  auto* fileListRenderer = new TextRenderer(fileListBuffer, fileListWindow);
-  auto* filePreviewRenderer = new TextRenderer(filePreviewBuffer, filePreviewWindow);
-  auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer, fileInfoWindow);
-  auto* commandRenderer = new CommandRenderer(commandWindow);
+
+  auto* fileListRenderer = new TextRenderer(fileListBuffer, std::move(fileListWindow));
+  auto* filePreviewRenderer = new TextRenderer(filePreviewBuffer, std::move(filePreviewWindow));
+  auto* fileInfoRenderer = new TextRenderer(fileInfoBuffer, std::move(fileInfoWindow));
+  auto* commandRenderer = new CommandRenderer(std::move(commandWindow));
+
+  auto* fileListLayout = new WindowLayout(term::window_dimensions{}, fileListRenderer);
+  auto* filePreviewLayout = new WindowLayout(term::window_dimensions{}, filePreviewRenderer);
+  auto* fileInfoLayout = new WindowLayout(term::window_dimensions{}, fileInfoRenderer);
+  auto* rootLayout = new VerticalLayout(
+      term::window_dimensions{0, 0, term->width(), term->height() - 1}, fileListLayout,
+      new HorizontalLayout(term::window_dimensions{}, fileInfoLayout, filePreviewLayout, 0.1));
+  rootLayout->recalculate();
 
   connect(fileListBuffer, &FileListBuffer::selectedFileChanged, m_appState,
           &AppState::setPreviewPath);
@@ -80,11 +91,10 @@ void MainTask::run() {
     }
   });
 
-  // exit on enter, non-blocking
   auto* notifier = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
   connect(notifier, &QSocketNotifier::activated, userInput, &UserInput::handleChar);
 
-  connect(m_appState, &AppState::finished, [this]() { emit finished(); });
+  connect(m_appState, &AppState::finished, [this] { emit finished(); });
 
   fileListBuffer->update();
   fileInfoBuffer->update();

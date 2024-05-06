@@ -9,7 +9,7 @@ struct SetPreviewFileMessage {
     QString newPath;
 };
 
-QDataStream& operator<<(QDataStream& in, const SetPreviewFileMessage& msg);
+QDataStream& operator<<(QDataStream& out, const SetPreviewFileMessage& msg);
 QDataStream& operator>>(QDataStream& in, SetPreviewFileMessage& msg);
 
 Q_DECLARE_METATYPE(SetPreviewFileMessage)

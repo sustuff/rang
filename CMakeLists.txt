@@ -42,6 +42,10 @@ add_library(rang-lib
         src/commands/set_preview_file_command.cpp
         src/user_input.cpp
         src/renderer/command_renderer.cpp
+        src/layout/layout.cpp
+        src/layout/window_layout.cpp
+        src/layout/vertical_layout.cpp
+        src/layout/horizontal_layout.cpp
         src/unix_signal.cpp
 )
 
