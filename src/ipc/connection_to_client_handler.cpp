@@ -2,6 +2,7 @@
 
 #include "commands/set_current_dir_command.hpp"
 #include "commands/set_preview_file_command.hpp"
+#include "compatibility.hpp"
 #include "ipc/messages/authentication_message.hpp"
 #include "ipc/messages/messages.hpp"
 #include "main_task.hpp"
