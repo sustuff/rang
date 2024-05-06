@@ -42,6 +42,7 @@ add_library(rang-lib
         src/commands/set_preview_file_command.cpp
         src/user_input.cpp
         src/renderer/command_renderer.cpp
+        src/unix_signal.cpp
 )
 
 target_include_directories(rang-lib PUBLIC include)

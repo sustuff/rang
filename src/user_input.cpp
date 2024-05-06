@@ -2,9 +2,13 @@
 #include <iostream>
 #include "commands/set_current_dir_command.hpp"
 #include "commands/set_preview_file_command.hpp"
+#include "unix_signal.hpp"
 
 UserInput::UserInput(AppState* appState, FileListBuffer* fileListBuffer)
     : QObject{appState}, m_appState{appState}, m_fileListBuffer{fileListBuffer} {
+  auto* sigint = new UnixSignal(SIGINT, this);
+  connect(sigint, &UnixSignal::received, [this] { emit m_appState->finished(); });
+
   QKeyCombination h{Qt::Key_H};
   QKeyCombination j{Qt::Key_J};
   QKeyCombination k{Qt::Key_K};
