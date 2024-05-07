@@ -6,8 +6,9 @@
 namespace term {
 
 namespace ios {
+#include <sys/ioctl.h>
 #include <termios.h>
-}
+}  // namespace ios
 
 class terminal_stream {
   private:

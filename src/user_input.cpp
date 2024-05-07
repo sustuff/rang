@@ -1,16 +1,17 @@
 #include "user_input.hpp"
-#include <iostream>
 #include "commands/set_current_dir_command.hpp"
 #include "commands/set_preview_file_command.hpp"
 #include "unix_signal.hpp"
 
 UserInput::UserInput(AppState* appState, FileListBuffer* fileListBuffer)
     : QObject{appState}, m_appState{appState}, m_fileListBuffer{fileListBuffer} {
-  auto* sigint = UnixSignal::createSelf<SIGINT>(this);
-  connect(sigint, &UnixSignal::received, [this] { emit m_appState->finished(); });
+  using unix_signal::Signal;
 
-  auto* sigwinch = UnixSignal::createSelf<SIGWINCH>(this);
-  connect(sigwinch, &UnixSignal::received, [this] { emit resized(); });
+  auto* sigint = Signal::createSelf<SIGINT>(this);
+  connect(sigint, &Signal::received, [this] { emit m_appState->finished(); });
+
+  auto* sigwinch = Signal::createSelf<SIGWINCH>(this);
+  connect(sigwinch, &Signal::received, [this] { emit resized(); });
 
   QKeyCombination h{Qt::Key_H};
   QKeyCombination j{Qt::Key_J};
@@ -29,7 +30,7 @@ const std::string& UserInput::currentCommand() {
 }
 
 void UserInput::handleChar() {
-  char key = std::getchar();
+  char key = std::getchar();  // FIXME std::getchar() returns int
   if (m_currentCommand.empty() && key != ':') {
     m_parser.nextKeyCombination(simpleKeyCombination(key));
   } else if (key == '\n') {

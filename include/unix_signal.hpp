@@ -1,10 +1,13 @@
 #ifndef RANG_SRC_UNIX_SIGNAL_HPP_
 #define RANG_SRC_UNIX_SIGNAL_HPP_
 
-#include <signal.h>
-#include <sys/socket.h>
 #include <QObject>
 #include <QSocketNotifier>
+
+namespace unix_signal {
+#include <signal.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 template <int SignalNumber>
 class StaticSignalStorage final {
@@ -19,19 +22,19 @@ class StaticSignalStorage final {
     }
 };
 
-class UnixSignal : public QObject {
+class Signal : public QObject {
     Q_OBJECT
   public:
     template <int SignalNumber>
-    static UnixSignal* createSelf(QObject* parent) {
+    static Signal* createSelf(QObject* parent) {
       using StaticStorage = StaticSignalStorage<SignalNumber>;
       if (socketpair(AF_UNIX, SOCK_STREAM, 0, StaticStorage::fileDescriptor)) {
         qFatal("Couldn't create socketpair for signal %d", SignalNumber);
       }
 
-      auto* self = new UnixSignal(StaticStorage::fileDescriptor, parent);
+      auto* self = new Signal(StaticStorage::fileDescriptor, parent);
       self->notifier = new QSocketNotifier(self->fileDescriptor[1], QSocketNotifier::Read, self);
-      connect(self->notifier, &QSocketNotifier::activated, self, &UnixSignal::handleSignal);
+      connect(self->notifier, &QSocketNotifier::activated, self, &Signal::handleSignal);
 
       struct sigaction action;
       action.sa_handler = StaticStorage::handler;
@@ -49,7 +52,7 @@ class UnixSignal : public QObject {
     void received();
 
   private:
-    UnixSignal(int* fileDescriptor, QObject* parent);
+    Signal(int* fileDescriptor, QObject* parent);
 
     QSocketNotifier* notifier;
     int* fileDescriptor;
@@ -57,5 +60,6 @@ class UnixSignal : public QObject {
   private slots:
     void handleSignal();
 };
+}  // namespace unix_signal
 
 #endif  // RANG_SRC_UNIX_SIGNAL_HPP_
