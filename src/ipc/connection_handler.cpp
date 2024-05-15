@@ -1,4 +1,5 @@
 #include "ipc/connection_handler.hpp"
+#include <QVariant>
 
 ConnectionHandlerThread::ConnectionHandlerThread(QLocalSocket* socketIn, QObject* parent)
     : QThread(parent), m_socket(socketIn) {

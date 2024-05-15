@@ -1,11 +1,14 @@
 #ifndef RANG_TERM_TERMINAL_HPP_
 #define RANG_TERM_TERMINAL_HPP_
 
+#include <ostream>
+
 namespace term {
 
 namespace ios {
+#include <sys/ioctl.h>
 #include <termios.h>
-}
+}  // namespace ios
 
 class terminal_stream {
   private:
@@ -30,9 +33,9 @@ class terminal {
 
     ios::termios initial_ios;
 
+  public:
     static void resize(int);
 
-  public:
     terminal_stream stream;
 
     terminal();

@@ -1,7 +1,8 @@
 #ifndef RANG_SRC_IPC_CONNECTION_HANDLER_HPP_
 #define RANG_SRC_IPC_CONNECTION_HANDLER_HPP_
 
-#include <QtCore>
+#include <QLocalSocket>
+#include <QThread>
 
 /// Basic class for both client-to-server and server-to-client communications.
 class ConnectionHandlerThread : public QThread {

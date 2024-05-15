@@ -1,8 +1,6 @@
 #ifndef RANG_SRC_BUFFER_BUFFER_HPP_
 #define RANG_SRC_BUFFER_BUFFER_HPP_
 
-#include <QObject>
-
 #include "text/line.hpp"
 
 /// Buffers provide some information which can later go through Renderer.

@@ -1,7 +1,7 @@
 #ifndef RANG_SRC_REGISTER_REGISTER_HPP_
 #define RANG_SRC_REGISTER_REGISTER_HPP_
 
-#include <QtCore>
+#include <QObject>
 
 /// Registers are parts of AppState, they store public information like current directory
 /// or list of selected files.

@@ -1,3 +1,5 @@
+#include <QCommandLineParser>
+#include <QTimer>
 #include "app_info.hpp"
 #include "client_task.hpp"
 #include "ipc/messages/messages.hpp"
@@ -36,7 +38,7 @@ int clientMain(int argc, char* argv[]) {
 
   auto* task = new ClientTask(&app);
   QObject::connect(task, &ClientTask::finished, &app, &QCoreApplication::quit);
-  QTimer::singleShot(0, task, [&]() { task->run(parser.value(authTokenOption), message); });
+  QTimer::singleShot(0, task, [&] { task->run(parser.value(authTokenOption), message); });
 
   return QCoreApplication::exec();
 }

@@ -1,5 +1,4 @@
 #include "meta.hpp"
-#include <QMetaType>
 
 #include "ipc/messages/messages.hpp"
 

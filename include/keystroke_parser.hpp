@@ -1,8 +1,6 @@
 #ifndef RANG_INCLUDE_KEYSTROKE_PARSER_HPP_
 #define RANG_INCLUDE_KEYSTROKE_PARSER_HPP_
 
-#include <QKeyCombination>
-#include <QList>
 #include "utility/trie.hpp"
 
 using Keystroke = QList<QKeyCombination>;

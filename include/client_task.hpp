@@ -1,7 +1,7 @@
 #ifndef RANG_SRC_CLIENT_TASK_HPP_
 #define RANG_SRC_CLIENT_TASK_HPP_
 
-#include <QtCore>
+#include <QVariant>
 
 /// Entry point in client mode.
 class ClientTask : public QObject {

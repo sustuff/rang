@@ -1,17 +1,28 @@
 #include "user_input.hpp"
-#include <iostream>
 #include "commands/set_current_dir_command.hpp"
 #include "commands/set_preview_file_command.hpp"
+#include "unix_signal.hpp"
 
 UserInput::UserInput(AppState* appState, FileListBuffer* fileListBuffer)
     : QObject{appState}, m_appState{appState}, m_fileListBuffer{fileListBuffer} {
+  using unix_signal::Signal;
+
+  auto* sigint = Signal::createSelf<SIGINT>(this);
+  connect(sigint, &Signal::received, [this] { emit m_appState->finished(); });
+
+  auto* sigwinch = Signal::createSelf<SIGWINCH>(this);
+  connect(sigwinch, &Signal::received, [this] { emit resized(); });
+
   QKeyCombination h{Qt::Key_H};
   QKeyCombination j{Qt::Key_J};
   QKeyCombination k{Qt::Key_K};
   QKeyCombination l{Qt::Key_L};
-  m_parser.registerKeystroke({h}, [this]() { goToParentDir(); });
-  m_parser.registerKeystroke({j}, [this]() { goDown(); });
-  m_parser.registerKeystroke({k}, [this]() { goUp(); });
+  QKeyCombination enter{Qt::Key_Return};
+  m_parser.registerKeystroke({h}, [this] { goToParentDir(); });
+  m_parser.registerKeystroke({j}, [this] { emit goDown(); });
+  m_parser.registerKeystroke({k}, [this] { emit goUp(); });
+  m_parser.registerKeystroke({l}, [this] { emit goToChildDir(); });
+  m_parser.registerKeystroke({enter}, [this] { emit goToChildDir(); });
 }
 
 const std::string& UserInput::currentCommand() {
@@ -19,7 +30,7 @@ const std::string& UserInput::currentCommand() {
 }
 
 void UserInput::handleChar() {
-  char key = std::getchar();
+  char key = std::getchar();  // FIXME std::getchar() returns int
   if (m_currentCommand.empty() && key != ':') {
     m_parser.nextKeyCombination(simpleKeyCombination(key));
   } else if (key == '\n') {
@@ -54,19 +65,15 @@ void UserInput::handleCommand() {
 }
 
 void UserInput::goToParentDir() {
-  m_appState->currentDir.setPath(
-      std::filesystem::canonical(m_appState->currentDir.path()).parent_path());
-}
-
-void UserInput::goDown() {
-}
-
-void UserInput::goUp() {
+  m_appState->currentDir.setPath(canonical(m_appState->currentDir.path()).parent_path());
 }
 
 QKeyCombination UserInput::simpleKeyCombination(char key) {
   if ('a' <= key && key <= 'z') {
     return static_cast<Qt::Key>(std::toupper(key));
+  }
+  if (key == '\n') {
+    return Qt::Key_Return;
   }
   return Qt::Key_unknown;
 }

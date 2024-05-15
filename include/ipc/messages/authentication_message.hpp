@@ -9,7 +9,7 @@ struct AuthenticationMessage {
     QString token;
 };
 
-QDataStream& operator<<(QDataStream& in, const AuthenticationMessage& msg);
+QDataStream& operator<<(QDataStream& out, const AuthenticationMessage& msg);
 QDataStream& operator>>(QDataStream& in, AuthenticationMessage& msg);
 
 Q_DECLARE_METATYPE(AuthenticationMessage)

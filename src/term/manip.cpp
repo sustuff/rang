@@ -2,19 +2,19 @@
 #include <format>
 
 namespace term::manip {
-term::terminal_stream& operator<<(term::terminal_stream& ts, const alternate_buffer& m) {
+terminal_stream& operator<<(terminal_stream& ts, const alternate_buffer& m) {
   return ts << (raw::esc + "[?1049" + raw::hl(m.enable));
 }
 
-term::terminal_stream& operator<<(term::terminal_stream& ts, const cursor& m) {
+terminal_stream& operator<<(terminal_stream& ts, const cursor& m) {
   return ts << (raw::esc + "[?25" + raw::hl(m.show));
 }
 
-term::terminal_stream& operator<<(term::terminal_stream& ts, const clear&) {
+terminal_stream& operator<<(terminal_stream& ts, const clear&) {
   return ts << (raw::esc + "[2J");
 }
 
-term::window_stream& operator<<(term::window_stream& ws, const clear&) {
+window_stream& operator<<(window_stream& ws, const clear&) {
   // ouch
   std::string empty(ws.dimensions.size_x, ' ');
   for (int y = 1; y <= ws.dimensions.size_y; ++y) {
@@ -23,11 +23,11 @@ term::window_stream& operator<<(term::window_stream& ws, const clear&) {
   return ws;
 }
 
-term::terminal_stream& operator<<(term::terminal_stream& ts, const move& m) {
+terminal_stream& operator<<(terminal_stream& ts, const move& m) {
   return ts << (raw::esc + std::format("[{};{}H", m.y, m.x));
 }
 
-term::window_stream& operator<<(term::window_stream& ws, const move& m) {
+window_stream& operator<<(window_stream& ws, const move& m) {
   return ws << (raw::esc +
                 std::format("[{};{}H", ws.dimensions.offset_y + m.y, ws.dimensions.offset_x + m.x));
 }

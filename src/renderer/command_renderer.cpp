@@ -2,8 +2,16 @@
 #include <iostream>
 #include "term/manip.hpp"
 
-CommandRenderer::CommandRenderer(std::shared_ptr<term::window> window)
-    : m_window(std::move(window)) {
+CommandRenderer::CommandRenderer(std::unique_ptr<term::window> window, QObject* parent)
+    : Renderer(std::move(window), parent) {
+}
+
+// FIXME: Кажется тут немного копипасты
+void CommandRenderer::refresh() {
+  m_window->stream << term::manip::move{1, 1};
+  m_window->stream << m_currentCommand;
+  m_window->stream << term::manip::cursor{.show = true};
+  m_window->stream << std::flush;
 }
 
 void CommandRenderer::reset() {

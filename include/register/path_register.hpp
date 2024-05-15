@@ -1,6 +1,7 @@
 #ifndef RANG_SRC_REGISTER_PATH_REGISTER_HPP_
 #define RANG_SRC_REGISTER_PATH_REGISTER_HPP_
 
+#include <filesystem>
 #include "register.hpp"
 
 class PathRegister : public Register {

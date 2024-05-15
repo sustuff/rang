@@ -15,7 +15,6 @@ void KeystrokeParser::nextKeyCombination(const QKeyCombination& combination) {
   }
 }
 
-void KeystrokeParser::registerKeystroke(const Keystroke& keystroke,
-                                        const KeystrokeParser::ActionType& action) {
+void KeystrokeParser::registerKeystroke(const Keystroke& keystroke, const ActionType& action) {
   m_keystrokes.addSequence(keystroke.begin(), keystroke.end(), action);
 }

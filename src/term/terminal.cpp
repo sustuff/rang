@@ -1,9 +1,7 @@
 #include "term/terminal.hpp"
 #include "term/manip.hpp"
 
-#include <signal.h>
-#include <sys/ioctl.h>
-#include <termios.h>
+#include <csignal>
 #include <iostream>
 
 namespace term {
@@ -17,13 +15,13 @@ terminal_stream& terminal_stream::operator<<(std::ostream& (*func)(std::ostream&
 
 terminal::terminal() : stream(std::cout) {
   // disable echo and buffering
-  tcgetattr(fileno(stdout), &initial_ios);
+  ios::tcgetattr(fileno(stdout), &initial_ios);
   ios::termios current = initial_ios;
   current.c_lflag &= ~(ECHO | ICANON);
-  tcsetattr(fileno(stdout), TCSANOW, &current);
+  ios::tcsetattr(fileno(stdout), TCSANOW, &current);
 
   // set initial terminal size
-  terminal::resize(0);
+  resize(0);
 
   // handle terminal resize
   signal(SIGWINCH, terminal::resize);
@@ -35,7 +33,7 @@ terminal::~terminal() {
   stream << manip::clear{} << manip::alternate_buffer{false} << manip::cursor{true} << std::flush;
 
   // restore termios
-  tcsetattr(fileno(stdout), TCSANOW, &initial_ios);
+  ios::tcsetattr(fileno(stdout), TCSANOW, &initial_ios);
 }
 
 int terminal::m_width;
@@ -50,10 +48,10 @@ int terminal::height() const {
 }
 
 void terminal::resize(int) {
-  winsize ws;
-  ioctl(1, TIOCGWINSZ, &ws);
-  terminal::m_width = ws.ws_col;
-  terminal::m_height = ws.ws_row;
+  ios::winsize ws;
+  ios::ioctl(1, TIOCGWINSZ, &ws);
+  m_width = ws.ws_col;
+  m_height = ws.ws_row;
 }
 
 }  // namespace term

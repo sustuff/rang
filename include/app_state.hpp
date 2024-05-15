@@ -1,7 +1,8 @@
 #ifndef RANG_SRC_APP_STATE_HPP_
 #define RANG_SRC_APP_STATE_HPP_
 
-#include <QtCore>
+#include <QMutex>
+#include <filesystem>
 
 #include "register/path_register.hpp"
 
@@ -19,6 +20,9 @@ class AppState : public QObject {
 
   signals:
     void finished();
+
+  public slots:
+    void setPreviewPath(std::optional<std::filesystem::path>);
 };
 
 #endif  // RANG_SRC_APP_STATE_HPP_
