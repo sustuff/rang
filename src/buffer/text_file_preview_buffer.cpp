@@ -1,5 +1,7 @@
 #include "buffer/text_file_preview_buffer.hpp"
 
+#include <filesystem>
+
 void TextFilePreviewBuffer::update() {
   if (status(m_path).type() == std::filesystem::file_type::regular) {
     QFile file(m_path);

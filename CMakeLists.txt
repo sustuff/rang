@@ -34,7 +34,6 @@ add_library(rang-lib
         src/text/color.cpp
         src/text/word.cpp
         src/text/line.cpp
-        src/qt_operators.cpp
         src/utility/trie.cpp
         src/keystroke_parser.cpp
         src/commands/command.cpp

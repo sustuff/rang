@@ -5,10 +5,8 @@
 
 namespace term {
 
-namespace ios {
 #include <sys/ioctl.h>
 #include <termios.h>
-}  // namespace ios
 
 class terminal_stream {
   private:
@@ -31,7 +29,7 @@ class terminal {
     static int m_width;
     static int m_height;
 
-    ios::termios initial_ios;
+    termios initial_ios;
 
   public:
     static void resize(int);
